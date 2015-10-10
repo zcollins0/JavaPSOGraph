@@ -21,7 +21,7 @@ import java.util.Random;
 import java.util.TreeMap;
 import java.util.Vector;
 
-import psograph.graph.calc.CostFunction;
+import psograph.graph.calc.ICostFunction;
 import psograph.graph.calc.LinearCostFunction;
 import psograph.graph.calc.NonLinearCostFunction;
 
@@ -30,8 +30,8 @@ import psograph.graph.calc.NonLinearCostFunction;
 
 
 /**
- * A node location calculator takes a grap in, and then connects it to every
- * other node.  THis is useful for determining what node to pick as
+ * A node location calculator takes a Graph in, and then connects it to every
+ * other node.  This is useful for determining what node to pick as
  * you can make the decision based up cost/length.
  * @author Patrick
  *
@@ -77,6 +77,8 @@ public class NodeLocationCalculator  extends Graph implements Serializable
 	}
 	/**
 	 * Returns the node which is the furthest from specified node.
+	 * If there are mutliple Nodes that tied forfurthest neighbor this picks a random
+	 * Node.
 	 * @param from
 	 * @return
 	 * @throws Exception
@@ -125,7 +127,7 @@ public class NodeLocationCalculator  extends Graph implements Serializable
 	
 	/**
 	 * Picks a node that calculator knows we are not connected to.
-	 * On a percentatge it will be a close node or random node.
+	 * On a percentage it will be a close node or random node.
 	 */
 	public Node chooseNode(int id)throws Exception
 	{
@@ -150,7 +152,8 @@ public class NodeLocationCalculator  extends Graph implements Serializable
 		return n;
 	}
 	/**
-	 * Choose random node
+	 * Choose random node to connect the inputted Node to.  This will specifically 
+	 * exclude the 5 closest nodes.
 	 * @param node
 	 * @return
 	 * @throws Exception
@@ -161,7 +164,8 @@ public class NodeLocationCalculator  extends Graph implements Serializable
 	}
 	
 	/**
-	 * Choose random node.
+	 * Choose random node to connect the inputted Node to.  This will specifically 
+	 * exclude the 5 closest nodes.
 	 * @param id
 	 * @return
 	 * @throws Exception
@@ -225,7 +229,7 @@ public class NodeLocationCalculator  extends Graph implements Serializable
 	
 	
 	/**
-	 * Get N close nodes to specifed ID node
+	 * Get N close nodes to specified ID node
 	 * @param id
 	 * @param N
 	 * @return
@@ -443,7 +447,7 @@ public class NodeLocationCalculator  extends Graph implements Serializable
 	}
 	
 	/**
-	 * Calculates weigth using cost function based upon X,Y coordinates
+	 * Calculates weight using cost function based upon X,Y coordinates
 	 * @param x_1
 	 * @param y_1
 	 * @param x_2
@@ -462,7 +466,7 @@ public class NodeLocationCalculator  extends Graph implements Serializable
 	int m_chooseClosestNumber = 5;
 	Random m_choseOrNot;
 	
-	private CostFunction m_CostFunction;
+	private ICostFunction m_CostFunction;
 	
 	public int m_closest = 0;
 	public int m_random = 0;

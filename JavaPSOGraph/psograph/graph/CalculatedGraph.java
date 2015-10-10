@@ -44,10 +44,7 @@ public class CalculatedGraph extends Graph implements Serializable
 	// I did explore it, but I believe you can have the version key off the serialVersionUID
 	// and have it deal gracefully with this situation.
 	
-	/**
-	 * @deprecated
-	 */
-	double m_costOfDirectConnectivity;
+
 
 	
 	//This guy takes up a lot of space, so we should not store him
@@ -78,6 +75,15 @@ public class CalculatedGraph extends Graph implements Serializable
 	
 	@SuppressWarnings("unused")
 	private TreeMap<Double, Integer> m_distributionSPL;
+	/**
+	 * @deprecated
+	 */
+	double m_costOfDirectConnectivity;
+	/**
+	@deprecated
+	*/
+	@SuppressWarnings("unused")
+	private double m_clumpinessOfLayout;
 	
 	private TreeMap<Integer, Integer> m_distributionSPL2;
 	private TreeMap<Double, Integer> m_distributionISPL;
@@ -104,11 +110,7 @@ public class CalculatedGraph extends Graph implements Serializable
 	private TreeMap<Integer, Double> m_closenessById;
 	
 
-	/**
-	@deprecated
-	*/
-	@SuppressWarnings("unused")
-	private double m_clumpinessOfLayout;
+
 	
 
 /**

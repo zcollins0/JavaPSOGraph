@@ -46,7 +46,7 @@ public class Node implements Serializable
 	
 	private boolean m_visited = false;
 	
-    int m_longestPath = -1;
+    private int m_longestPath = -1;
 	
 	/** create empty node with specified ID and X,Y location
      * 
@@ -455,7 +455,7 @@ public class Node implements Serializable
 
 		return count;
 	}
-	/** REturns number of SPL (as we can multiple shortest paths)
+	/** Returns number of SPL (as we can multiple shortest paths)
 	 * 
 	 * @return
 	 */
@@ -475,7 +475,14 @@ public class Node implements Serializable
 		
 	}
 	/**
-	 * Removes a connection between this node and the specified node id.
+	 * Removes a connection between this node and the specified node id.  NOTE:
+	 * This will not remove a connect from the other node to this one.  Example, if 
+	 * Node A and Node B were connectioned.  You would need to call both:
+	 * NodeA.removeconnection(NodeB.getID());
+	 * NodeB.removeConnection(NodeA.getID());
+	 * 
+	 * This was implemented this way as to keep the implementation possible to 
+	 * do bi-directed graphs.
 	 * 
 	 * An exception will be throw if we try to remove a connection to it's self.
 	 * Or if we attempt remove a connection to an unconnected node.
@@ -492,12 +499,11 @@ public class Node implements Serializable
 		{
 			throw new Exception("Node::removeConnection - trying to self");
 		}
-		
-		if(isConnectedTo(id)== false)
+		else if(isConnectedTo(id)== false)
+		{
 			throw new Exception("Node::removeConnection - trying to remove connection that does not exist");
-		
-		m_connectivityList.remove(id);
-		
+		}
+		m_connectivityList.remove(id);	
 	}
 	/** Sets the Depth
 	 * 

@@ -23,7 +23,7 @@ import java.io.Serializable;
  * @author Patrick
  *
  */
-public class NonLinearCostFunction extends CostFunction  implements Serializable
+public class NonLinearCostFunction implements ICostFunction, Serializable
 {
 
 	private static final long serialVersionUID = -2786664952929279473L;
@@ -34,7 +34,8 @@ public class NonLinearCostFunction extends CostFunction  implements Serializable
 	public NonLinearCostFunction() {}
 	
 	/**
-	 * Calculate the cost.
+	 * Calculate the cost.  If the cost comes to be zero, we make the cost
+	 * be .01
 	 */
 	public double calculate (double t_sig) throws Exception
 	{

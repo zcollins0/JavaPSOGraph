@@ -23,7 +23,7 @@ import java.io.Serializable;
  * @author Patrick
  *
  */
-public class LinearCostFunction extends CostFunction implements Serializable
+public class LinearCostFunction implements ICostFunction, Serializable
 {
 
 	/**
@@ -37,7 +37,8 @@ public class LinearCostFunction extends CostFunction implements Serializable
 	public LinearCostFunction() {}
 	
 	/**
-	 * Calculate cost.
+	 * Calculate cost.  If the cost comes to be zero, we make the cost
+	 * be .01
 	 */
 	public double calculate (double t_sig) throws Exception
 	{

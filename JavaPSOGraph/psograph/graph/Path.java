@@ -71,11 +71,6 @@ public class Path  implements Serializable
 		m_endNode = newEnd;
 	}
 	
-	//public void addNodeToPath(Node n)
-	//{
-	///	m_path.add(n);
-///}
-	
 	/**
 	 * Returns the Vector of Nodes representing the Path
 	 * @return
@@ -166,104 +161,6 @@ public class Path  implements Serializable
 		System.out.println("");
 		
 	}
-	
-	//Olekas 19-May-2012 I am not sure why I have this here, but I am going to keep in case it useful
-
-	// * 	/**
-//	 * 
-//	 */
-//	private static final long serialVersionUID = 5406576084452654454L;
-//	int[] m_path;
-//	int m_startNode;
-//	int m_endNode;
-//	
-//	//We do not add the start node to keep path zero for the case
-//	// there are no more nodes in the path.
-//	
-//	public Path(int start)
-//	{
-//		m_startNode = start;
-//		m_path = new int[0];
-//	}
-//	
-//	public Path(Path p, int newEnd)
-//	{
-//		m_startNode = p.getStart();
-//		m_path = new int[p.m_path.length+1];
-//		for(int i =0; i < p.m_path.length; i++)
-//		{
-//			m_path[i] = p.m_path[i];
-//		}
-//		m_path[p.m_path.length ] =newEnd;
-//		m_endNode = newEnd;
-//	}
-//	
-//	//public void addNodeToPath(Node n)
-//	//{
-//	///	m_path.add(n);
-/////}
-//	
-//	public int[] getPath()
-//	{
-//		return m_path;
-//	}
-//	
-//	public int getStart()
-//	{
-//		return m_startNode;
-//	}
-//	
-//	public int getEnd()
-//	{
-//		return m_endNode;
-//	}
-//	
-//	public int getNumberOfNodesOnPath()
-//	{
-//		return 1 + m_path.length ;
-//	}
-//	
-//	public int getLength()
-//	{
-//		return m_path.length ;
-//	}
-//
-//	public boolean isNodeOnPath(int n)
-//	{
-//		boolean result = false;
-//		if(n == m_startNode 
-//				|| n == m_endNode)
-//		{
-//			return result;
-//		}
-//		else
-//		{   
-//			boolean stop = false;
-//			for(int i =0; i < m_path.length && !stop; i++)
-//			{
-//				if(n == m_path[i])
-//				{
-//					result = true;
-//					stop = true;
-//				}
-//			}
-//		}
-//		
-//		return result;
-//		
-//	}
-//
-//	public void print() 
-//	{
-//		System.out.print(m_startNode+" ");
-//		
-//		for(int i =0; i < m_path.length; i++)
-//		{
-//			System.out.print(m_path[i]+" ");
-//		}
-//		System.out.println("");
-//		
-//	}
-	
+		
 
 }

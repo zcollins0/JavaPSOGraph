@@ -16,28 +16,15 @@
 //   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 package psograph.graph.calc;
 
-import java.io.Serializable;
 
 /**
  * Base Class of Cost Function. This to determined the cost of to connect two edges.
  * @author Patrick
  *
  */
-public class CostFunction implements Serializable
+public interface  ICostFunction 
 {
+	
+	public double calculate (double t) throws Exception;
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -4911946440142911675L;
-
-	public CostFunction() {}
-	
-	public double calculate (double t) throws Exception
-	{
-		throw new Exception ("Using BaseClass of CostFunction");
-		
-	}
-	
-	
 }
