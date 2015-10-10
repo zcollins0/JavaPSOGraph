@@ -170,13 +170,13 @@ public class Util {
 	
 	public static void printMFileSpecial(CalculatedGraph cg1, double limit, File file) throws Exception
 	{
-		FileWriter fileLoc = new FileWriter(file);
-		BufferedWriter mout = new BufferedWriter(fileLoc);
-	    
 		//Now lets right out a M-Lab file
 		double adjecency[][] = cg1.getAdjecencyGraphWeights2();
 		if(adjecency == null)
 			throw new Exception("Adjecency graph is NULL");
+		
+		FileWriter fileLoc = new FileWriter(file);
+		BufferedWriter mout = new BufferedWriter(fileLoc);
 		
 		int n =   adjecency.length;
 		int ii, jj;
