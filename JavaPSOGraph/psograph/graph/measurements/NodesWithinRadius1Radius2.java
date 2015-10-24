@@ -22,7 +22,7 @@ import java.util.Vector;
 import psograph.graph.Graph;
 import psograph.graph.Node;
 import psograph.graph.NodeLocationCalculator;
-import psograph.graph.calc.NonLinearCostFunction;
+import psograph.graph.NonLinearCostFunction;
 
 
 public class NodesWithinRadius1Radius2 {

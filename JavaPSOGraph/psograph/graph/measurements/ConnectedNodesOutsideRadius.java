@@ -22,7 +22,7 @@ import java.util.Vector;
 import psograph.graph.Graph;
 import psograph.graph.GraphConstants;
 import psograph.graph.Node;
-import psograph.graph.calc.NonLinearCostFunction;
+import psograph.graph.NonLinearCostFunction;
 
 
 public class ConnectedNodesOutsideRadius  {

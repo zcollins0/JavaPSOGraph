@@ -26,6 +26,7 @@ import psograph.graph.ConnectionInfo;
 import psograph.graph.Graph;
 import psograph.graph.Node;
 import psograph.graph.NodeLocationCalculator;
+import psograph.graph.NonLinearCostFunction;
 import psograph.graph.calc.*;
 import psograph.graph.measurements.*;
 import psograph.util.Util;

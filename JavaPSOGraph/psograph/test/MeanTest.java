@@ -28,7 +28,7 @@ import org.junit.Test;
 
 import psograph.graph.CalculatedGraph;
 import psograph.graph.Graph;
-import psograph.graph.calc.NonLinearCostFunction;
+import psograph.graph.NonLinearCostFunction;
 
 
 public class MeanTest {

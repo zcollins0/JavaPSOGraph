@@ -21,9 +21,6 @@ import java.util.Random;
 import java.util.TreeMap;
 import java.util.Vector;
 
-import psograph.graph.calc.ICostFunction;
-import psograph.graph.calc.LinearCostFunction;
-import psograph.graph.calc.NonLinearCostFunction;
 
 
 

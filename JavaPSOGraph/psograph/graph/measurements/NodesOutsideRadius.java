@@ -23,7 +23,7 @@ import psograph.graph.Graph;
 import psograph.graph.GraphConstants;
 import psograph.graph.Node;
 import psograph.graph.NodeLocationCalculator;
-import psograph.graph.calc.NonLinearCostFunction;
+import psograph.graph.NonLinearCostFunction;
 
 
 public class NodesOutsideRadius 

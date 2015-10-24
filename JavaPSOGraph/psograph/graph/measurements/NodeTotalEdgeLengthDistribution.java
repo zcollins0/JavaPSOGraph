@@ -21,6 +21,7 @@ import java.util.Vector;
 
 import psograph.graph.Graph;
 import psograph.graph.Node;
+import psograph.graph.NonLinearCostFunction;
 import psograph.graph.calc.*;
 
 

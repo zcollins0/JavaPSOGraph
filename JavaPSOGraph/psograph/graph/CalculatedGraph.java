@@ -20,8 +20,6 @@ import java.io.*;
 import java.util.*;
 
 import psograph.graph.GraphConstants;
-import psograph.graph.calc.FitnessFunction;
-import psograph.graph.calc.NonLinearCostFunction;
 import psograph.graph.measurements.*;
 
 

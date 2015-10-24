@@ -22,7 +22,7 @@ import java.util.Vector;
 import psograph.graph.ConnectionInfo;
 import psograph.graph.Graph;
 import psograph.graph.Node;
-import psograph.graph.calc.NonLinearCostFunction;
+import psograph.graph.NonLinearCostFunction;
 
 
 public class AvgLinkLength implements Serializable,IGraphMeasument {
