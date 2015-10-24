@@ -19,7 +19,7 @@ package psograph.graph;
 import java.io.*; 
 import java.util.*;
 
-import psograph.graph.measurements.PercentageInLargestCluster;
+import psograph.measurements.PercentageInLargestCluster;
 
 
 

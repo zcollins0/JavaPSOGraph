@@ -26,7 +26,7 @@ import org.junit.Test;
 
 import psograph.graph.CalculatedGraph;
 import psograph.graph.Graph;
-import psograph.graph.measurements.ASPL;
+import psograph.measurements.ASPL;
 
 
 public class ASPLTest  {

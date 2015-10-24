@@ -25,7 +25,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import psograph.graph.*;
-import psograph.graph.measurements.SPL;
+import psograph.measurements.SPL;
 
 
 public class TestMeasurements3 {

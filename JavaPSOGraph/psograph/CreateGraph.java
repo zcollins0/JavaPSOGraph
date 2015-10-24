@@ -21,7 +21,7 @@ import java.util.Random;
 import java.util.Vector;
 
 import psograph.graph.*;
-import psograph.graph.measurements.PercentageInLargestCluster;
+import psograph.measurements.PercentageInLargestCluster;
 import psograph.util.Util;
 
 

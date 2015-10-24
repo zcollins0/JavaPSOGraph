@@ -20,7 +20,7 @@ import java.io.*;
 import java.util.*;
 
 import psograph.graph.GraphConstants;
-import psograph.graph.measurements.*;
+import psograph.measurements.*;
 
 
 /**
