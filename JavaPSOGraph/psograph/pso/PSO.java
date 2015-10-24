@@ -135,14 +135,14 @@ public class PSO extends Thread
 			
 			//Olekas May-19-2012 had this using the constant which is wrong
 			//should be indicated by the number of Nodes in the graph
-			pickA = r.nextInt(particle.getNumberOfNodes());//GraphConstants.NUM_NODES);
-			pickB = r.nextInt(particle.getNumberOfNodes());//GraphConstants.NUM_NODES);
+			pickA = r.nextInt(particle.getNumberOfNodes());
+			pickB = r.nextInt(particle.getNumberOfNodes());
 			while(pickA == pickB)
 			{
 				pickB = r.nextInt(GraphConstants.NUM_NODES);				
 			}
 			
-			if(!particle.isNodeAConnectedToNodeB(pickA, pickB))
+			if(!particle.isNodeAConnectedToNodeB(particle.getNode(pickA), particle.getNode(pickB)))
 			{
 				particle.addConnection(pickA, pickB);
 			}

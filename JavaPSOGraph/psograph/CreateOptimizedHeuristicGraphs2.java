@@ -442,7 +442,7 @@ public class CreateOptimizedHeuristicGraphs2 {
 						@SuppressWarnings("unused")
 						ConnectionInfo control = graphCandidate.getNode(from_id).getConnectionInfo(to_id);
 
-						if(calculatorMain.isNodeAConnectedToNodeB(from_id, to_id)
+						if(calculatorMain.isNodeAConnectedToNodeB(calculatorMain.getNode(from_id), calculatorMain.getNode(to_id))
 								== true)
 						{
 

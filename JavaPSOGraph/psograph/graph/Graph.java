@@ -745,21 +745,6 @@ public int [][] getAdjecencyGraph2()
 	}
 	
 	/**
-	 * I am not sure why I deprecated this.  I think I had an issue of comparing different IDs from 
-	 * different graphs.  So I felt using the Node object was safer ???   
-	 *	@deprecated
-	 */
-	public boolean isNodeAConnectedToNodeB(int nodeA, int nodeB) throws Exception
-	{
-		
-		Node from = m_headerNodesMap.get(nodeA);
-		Node to = m_headerNodesMap.get(nodeB);
-		
-		return from.isConnectedTo(to);
-		
-	}
-	
-	/**
 	 * Query method to see if two nodes have a edge in the graph
 	 * @param from From Node
 	 * @param to To Node
