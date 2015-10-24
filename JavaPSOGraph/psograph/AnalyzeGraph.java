@@ -16,7 +16,6 @@
 //   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 package psograph;
 
-import psograph.analysis.BasicDataPlots;
 import psograph.analysis.CreateFitnessCompHistograms;
 import psograph.analysis.CreateHistogram;
 import psograph.analysis.FitnessFunctionGraphs;
