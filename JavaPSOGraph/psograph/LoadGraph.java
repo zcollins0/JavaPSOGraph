@@ -25,7 +25,7 @@ import java.util.Vector;
 import psograph.graph.CalculatedGraph;
 import psograph.graph.Graph;
 import psograph.graph.NodeLocationCalculator;
-import psograph.util.Util;
+import psograph.util.Util; 
 
 
 public class LoadGraph {
