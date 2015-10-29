@@ -479,7 +479,7 @@ public class Node implements Serializable
 	/**
 	 * Removes a connection between this node and the specified node id.  NOTE:
 	 * This will not remove a connect from the other node to this one.  Example, if 
-	 * Node A and Node B were connectioned.  You would need to call both:
+	 * Node A and Node B were connected.  You would need to call both:
 	 * NodeA.removeconnection(NodeB.getID());
 	 * NodeB.removeConnection(NodeA.getID());
 	 * 
@@ -528,32 +528,6 @@ public class Node implements Serializable
 	public void setVisited(boolean b) 
 	{
 		m_visited=true;
-	}
-
-	/**
-	 * Sets the X coordinate
-	 * @param x
-	 * @throws Exception
-	 */
-	public void setX(double x) throws Exception
-	{
-		if(x> 1 || x < 0)
-			throw new Exception ("X is out of range - x:"+x);
-		
-		m_x=x;
-	}
-	
-	/** Sets the Y coordinate
-	 * 
-	 * @param y
-	 * @throws Exception
-	 */
-	public void setY(double y) throws Exception
-	{
-		if(y> 1 || y < 0)
-			throw new Exception ("Y is out of range - y:"+y);
-		
-		m_y=y;
 	}
 	
 }

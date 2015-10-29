@@ -40,7 +40,7 @@ public class BasicGraphTests  {
 	}
 	
 	@Test
-	public void testGraph()
+	public void testGraph() throws Exception
 	{
 		Graph copy = new Graph(m_graph);
 		
@@ -727,7 +727,7 @@ public class BasicGraphTests  {
 
 
 	@Test
-	public void testAddNode() 
+	public void testAddNode() throws Exception
 	{	
 		m_graph.addNode();
 		

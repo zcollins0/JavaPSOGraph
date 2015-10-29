@@ -159,7 +159,7 @@ public class TestUtils
 		
 		return tt;
 	}
-	static public Graph createEmptyGraph()
+	static public Graph createEmptyGraph() throws Exception
 	{
 		Graph tt = new Graph(0);
 		

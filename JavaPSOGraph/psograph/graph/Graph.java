@@ -89,7 +89,7 @@ public class Graph implements Serializable
 	 * That is the X,Y values will be in the range of 0.0 - 1.0  
 	 * @param nodes the number of nodes 
 	 */
-	public Graph(int nodes)
+	public Graph(int nodes) throws Exception
 	{
 		r = new Random();
 		m_nextNodeId =0;
@@ -172,7 +172,7 @@ public class Graph implements Serializable
 	 * 
 	 * 
 	 */
-	public int addNode()
+	public int addNode() throws Exception
 	{	
 		int retNodeId = m_nextNodeId;
 		
@@ -338,7 +338,7 @@ public class Graph implements Serializable
 	 * This is not checked if it is unique location
 	 * @return
 	 */
-	protected Location generateLocation()
+	protected Location generateLocation() throws Exception
 	{
 		
 		double xi = r.nextDouble();// + r.nextInt(5);

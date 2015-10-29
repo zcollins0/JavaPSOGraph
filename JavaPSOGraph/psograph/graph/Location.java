@@ -21,7 +21,8 @@ package psograph.graph;
 import java.io.Serializable;
 /**
  * Represents a Location of Node.  This is here to make it easier to 
- * check for coincident Nodes.
+ * check for coincident Nodes.  And to verify the location is within the bounds we expect it to be, which 
+ * is a 2-D coordinate bound, where each coordinate is between 0.0 and 1.0 inclusively.
  * @author Patrick
  *
  */
@@ -38,10 +39,31 @@ public class Location implements Serializable
 	 * @param x
 	 * @param y
 	 */
-	Location(double x, double y)
+	public Location(double x, double y) throws Exception
 	{
+		checkValues(x, y);
 		m_x = x;
 		m_y = y;
+	}
+	
+	/**
+	 * Constructor
+	 * @param x
+	 * @param y
+	 */
+	public Location(Location L) throws Exception
+	{
+		checkValues(L.m_x, L.m_y);
+		m_x = L.m_x;
+		m_y = L.m_y;
+	}
+	
+	private void checkValues(double x, double y) throws Exception
+	{		
+		if(!(Double.compare(x, 0.0) >= 0) || !(Double.compare( y, 1.0) <= 0))
+		{
+			throw new Exception("Values must be in between 0 and 1 inclusively.");
+		}
 	}
 	
 	/**
