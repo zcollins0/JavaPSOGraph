@@ -26,7 +26,7 @@ import java.util.TreeMap;
 import java.util.Vector;
 
 import psograph.graph.CalculatedGraph;
-import psograph.graph.ConnectionInfo;
+import psograph.graph.Edge;
 import psograph.graph.Graph;
 import psograph.graph.Node;
 import psograph.graph.NodeLocationCalculator;
@@ -237,7 +237,7 @@ public class CreateOptimizedHeuristicGraphs1 {
 				for(int j =0; j < vNodes.size(); j++)
 				{
 					System.out.println(j+" iter");
-					TreeMap<Integer,ConnectionInfo> neighbors = vNodes.get(j).getNeighbors();
+					TreeMap<Integer,Edge> neighbors = vNodes.get(j).getNeighbors();
 					Vector<Integer> vNodeIds = new Vector<Integer> (vNodes.get(j).getNeighbors().keySet());
 
 					Vector<Node> candNodes = new Vector<Node>();
@@ -442,15 +442,15 @@ public class CreateOptimizedHeuristicGraphs1 {
 						Node to = calculatorMain.getNode(highDegreenodes.get(k).getID());
 
 						@SuppressWarnings("unused")
-						ConnectionInfo ci2 = from.getConnectionInfo(to);
+						Edge ci2 = from.getConnectionInfo(to);
 						@SuppressWarnings("unused")
-						ConnectionInfo ci3 = calculatorMain.getNode(from.getID()).getConnectionInfo(to.getID());
+						Edge ci3 = calculatorMain.getNode(from.getID()).getEdgeInfo(to.getID());
 
-						ConnectionInfo ci ;
-						ci = calculatorMain.getNode(from_id).getConnectionInfo(to_id);
+						Edge ci ;
+						ci = calculatorMain.getNode(from_id).getEdgeInfo(to_id);
 
 						@SuppressWarnings("unused")
-						ConnectionInfo control = graphCandidate.getNode(from_id).getConnectionInfo(to_id);
+						Edge control = graphCandidate.getNode(from_id).getEdgeInfo(to_id);
 
 						if(calculatorMain.isNodeAConnectedToNodeB(calculatorMain.getNode(from_id),calculatorMain.getNode(to_id) )
 								== true)
@@ -479,9 +479,9 @@ public class CreateOptimizedHeuristicGraphs1 {
 						Node to = calculatorMain.getNode(candNodes.get(k).getID());
 
 						@SuppressWarnings("unused")
-						ConnectionInfo ci = from.getConnectionInfo(to);
+						Edge ci = from.getConnectionInfo(to);
 						@SuppressWarnings("unused")
-						ConnectionInfo ci2 = calculatorMain.getNode(from.getID()).getConnectionInfo(to.getID());
+						Edge ci2 = calculatorMain.getNode(from.getID()).getEdgeInfo(to.getID());
 
 
 						graphCandidate.addConnection(from.getID(), to.getID());

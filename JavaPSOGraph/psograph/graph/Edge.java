@@ -28,7 +28,7 @@ import java.io.Serializable;
  * @author Patrick
  *
  */
-public class ConnectionInfo implements Serializable
+public class Edge implements Serializable
 {
 
 	static final long serialVersionUID = 45L;
@@ -37,7 +37,7 @@ public class ConnectionInfo implements Serializable
 	 * Copy Constructor
 	 * @param ci
 	 */
-	public ConnectionInfo(ConnectionInfo ci)
+	public Edge(Edge ci)
 	{
 		m_weight = ci.m_weight;
 	}
@@ -46,7 +46,7 @@ public class ConnectionInfo implements Serializable
 	 * Constructor
 	 * @param weight
 	 */
-	public ConnectionInfo(double weight)
+	public Edge(double weight)
 	{
 		m_weight = weight;
 

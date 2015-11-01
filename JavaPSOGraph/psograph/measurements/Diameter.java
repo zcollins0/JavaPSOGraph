@@ -24,7 +24,7 @@ import java.util.TreeMap;
 import java.util.Vector;
 import java.util.LinkedList;
 
-import psograph.graph.ConnectionInfo;
+import psograph.graph.Edge;
 import psograph.graph.Graph;
 import psograph.graph.Node;
 
@@ -120,7 +120,7 @@ public class Diameter implements Serializable, IGraphMeasument
 	}
 	
 
-	int Next(TreeMap<Integer,ConnectionInfo> neighbors)
+	int Next(TreeMap<Integer,Edge> neighbors)
 	{
 		int val = -1;
 		
@@ -163,7 +163,7 @@ public class Diameter implements Serializable, IGraphMeasument
 			Node node = m_graph.getHeaderNodesMap().get(u);  
 			
 				
-			TreeMap<Integer,ConnectionInfo> tci = node.getNeighbors();
+			TreeMap<Integer,Edge> tci = node.getNeighbors();
 			if(tci == null)
 			{		
 				//System.out.println("Isolated node "+node.getID());

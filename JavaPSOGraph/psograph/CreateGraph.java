@@ -134,7 +134,7 @@ public class CreateGraph
 			else
 			{
 				//System.out.println("a real node returned for choose close node");
-				ConnectionInfo ci = n.getConnectionInfo(v_Nodes.get(t_id));
+				Edge ci = n.getConnectionInfo(v_Nodes.get(t_id));
 				canditate.addConnection(v_Nodes.get(t_id).getID(), n.getID(), ci.getWeight());
 				
 				//Remove from working NodeLoc so we don't hit it in random phase
@@ -177,7 +177,7 @@ public class CreateGraph
 			}
 			else
 			{
-				ConnectionInfo ci = n.getConnectionInfo(NodeToConnect);
+				Edge ci = n.getConnectionInfo(NodeToConnect);
 				canditate.addConnection(NodeToConnect.getID(), n.getID(), ci.getWeight());
 				workingNodeLoc.removeConnection(NodeToConnect.getID(), n.getID());
 				jj=jj+2;

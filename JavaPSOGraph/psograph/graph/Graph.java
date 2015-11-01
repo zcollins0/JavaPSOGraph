@@ -198,7 +198,7 @@ public class Graph implements Serializable
 	}
 	
 	/**
-	 * Adds a node with the specified id a certain location.  This was usef int he case
+	 * Adds a node with the specified id a certain location.  This was used in the case
 	 * of setting up SPL calculations, where we didn't want to copy the edges.  Probably should
 	 * have made a copy constructor with an option to copy the edges or not.
 	 * @param id
@@ -335,23 +335,22 @@ public class Graph implements Serializable
 		}
 	/**
 	 * This generates a random location inside the unit square.
-	 * This is not checked if it is unique location
-	 * @return
+	 * This is not checked if it is unique location.
+	 * 
+	 * Due to how nextDouble works, the range of location
+	 * will be 0.0 (inclusive) to 1.0 (exclusive).
+	 * 
 	 */
 	protected Location generateLocation() throws Exception
 	{
+		double xi = r.nextDouble();
+		double yi = r.nextDouble();
 		
-		double xi = r.nextDouble();// + r.nextInt(5);
-		double yi = r.nextDouble();//+ r.nextInt(5);
-		
-		
-		double x= xi;
+		double x = xi;
 		double y = yi;
 		
 		Location loc = new Location(x, y);
-		
-		//System.out.println("Rand ("+x+", "+y+")");
-		
+			
 		return loc;	
 	}	
 
@@ -646,7 +645,7 @@ public int [][] getAdjecencyGraph2()
 			{
 				Node n = v.get(i);
 				
-				TreeMap<Integer,ConnectionInfo> tci = n.getNeighbors();
+				TreeMap<Integer,Edge> tci = n.getNeighbors();
 				if(tci != null && tci.size() != 0)
 				{
 					Vector<Integer> vi = new Vector<Integer>(tci.keySet());
@@ -774,7 +773,7 @@ public int [][] getAdjecencyGraph2()
 			{
 				Node n = v.get(i);
 				System.out.print("Node "+n.getID()+" neighbors");
-				TreeMap<Integer,ConnectionInfo> tci = n.getNeighbors();
+				TreeMap<Integer,Edge> tci = n.getNeighbors();
 				if(tci != null && tci.size() != 0)
 				{
 					Vector<Integer> vi = new Vector<Integer>(tci.keySet());
@@ -805,7 +804,7 @@ public int [][] getAdjecencyGraph2()
 			{
 				Node n = v.get(i);
 				System.out.print("Node "+n.getID()+" loc ("+n.getX()+","+n.getY()+") neighbors");
-				TreeMap<Integer,ConnectionInfo> tci = n.getNeighbors();
+				TreeMap<Integer,Edge> tci = n.getNeighbors();
 				if(tci != null && tci.size() != 0)
 				{
 					Vector<Integer> vi = new Vector<Integer>(tci.keySet());
@@ -840,7 +839,7 @@ public int [][] getAdjecencyGraph2()
 			{
 				Node n = v.get(i);
 				System.out.print("Node "+n.getID()+" neighbors");
-				TreeMap<Integer,ConnectionInfo> tci = n.getNeighbors();
+				TreeMap<Integer,Edge> tci = n.getNeighbors();
 				if(tci != null && tci.size() != 0)
 				{
 					Vector<Integer> vi = new Vector<Integer>(tci.keySet());
@@ -875,14 +874,14 @@ public int [][] getAdjecencyGraph2()
 	}
 	
 	/**
-	 * Removes a Node with the specified ID and removes all connectsion to and from 
+	 * Removes a Node with the specified ID and removes all connections to and from 
 	 * that node.
 	 * @param id
 	 */
 	public void removeNode(int id)
 	{
 		Node t = m_headerNodesMap.get(id);	
-		TreeMap<Integer,ConnectionInfo> tci = t.getNeighbors();
+		TreeMap<Integer,Edge> tci = t.getNeighbors();
 		
 		//for each neighbor, pull out our reference
 		if(tci != null && tci.size() != 0)
@@ -892,10 +891,10 @@ public int [][] getAdjecencyGraph2()
 			for(int j = vkeys.size() -1 ; j >= 0 ;j=j-1)
 			{				
 				Node tt = m_headerNodesMap.get(vkeys.get(j));
-				TreeMap<Integer,ConnectionInfo> tci2 = tt.getNeighbors();
+				TreeMap<Integer,Edge> tci2 = tt.getNeighbors();
 				if(tci2 != null && tci2.size() != 0)
 				{   
-					ConnectionInfo ci2 = tci2.get(id);
+					Edge ci2 = tci2.get(id);
 					if(ci2 != null)
 						tci2.remove(id);
 				}
@@ -921,7 +920,7 @@ public int [][] getAdjecencyGraph2()
 			for(int i = 0; i < v.size(); i++)
 			{
 				Node n = v.get(i);
-				TreeMap<Integer,ConnectionInfo> tci = n.getNeighbors();
+				TreeMap<Integer,Edge> tci = n.getNeighbors();
 				if(tci != null && tci.size() != 0)
 				{
 					Vector<Integer> vi = new Vector<Integer>(tci.keySet());
@@ -961,7 +960,7 @@ public int [][] getAdjecencyGraph2()
 			for(int i = 0; i < v.size(); i++)
 			{
 				Node n = v.get(i);
-				TreeMap<Integer,ConnectionInfo> tci = n.getNeighbors();
+				TreeMap<Integer,Edge> tci = n.getNeighbors();
 				if(tci != null && tci.size() != 0)
 				{
 					Vector<Integer> vi = new Vector<Integer>(tci.keySet());

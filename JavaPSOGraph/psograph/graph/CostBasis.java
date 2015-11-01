@@ -75,7 +75,7 @@ public class CostBasis extends Graph implements Serializable{
 			    Integer furthestNeighborId = m_nodeLoc.pickFurthestNeighbor(furthestNeighborA);
 			    Node furthestNeighborB = m_nodeLoc.getHeaderNodesMap().get(furthestNeighborId);
 			     
-			    ConnectionInfo ci = furthestNeighborA.getConnectionInfo(furthestNeighborB);
+			    Edge ci = furthestNeighborA.getConnectionInfo(furthestNeighborB);
 			    addConnection(furthestNeighborB.getID(), furthestNeighborA.getID(), ci.getWeight());
 			    m_nodeLoc.removeConnection(furthestNeighborB.getID(), furthestNeighborA.getID());
 			}
@@ -126,7 +126,7 @@ public class CostBasis extends Graph implements Serializable{
 			}
 			else
 			{
-				ConnectionInfo ci = n.getConnectionInfo(NodeA);
+				Edge ci = n.getConnectionInfo(NodeA);
 				this.addConnection(NodeA.getID(), n.getID(), ci.getWeight());
 				m_nodeLoc.removeConnection(NodeA.getID(), n.getID());
 			}

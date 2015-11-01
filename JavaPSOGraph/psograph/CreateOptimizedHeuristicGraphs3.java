@@ -25,7 +25,7 @@ import java.util.TreeMap;
 import java.util.Vector;
 
 import psograph.graph.CalculatedGraph;
-import psograph.graph.ConnectionInfo;
+import psograph.graph.Edge;
 import psograph.graph.Graph;
 import psograph.graph.Node;
 import psograph.graph.NodeLocationCalculator;
@@ -225,7 +225,7 @@ public class CreateOptimizedHeuristicGraphs3 {
 				for(int j =0; j < vNodes.size(); j++)
 				{
 					System.out.println(j+" iter");
-					TreeMap<Integer,ConnectionInfo> neighbors = vNodes.get(j).getNeighbors();
+					TreeMap<Integer,Edge> neighbors = vNodes.get(j).getNeighbors();
 					Vector<Integer> vNodeIds = new Vector<Integer> (vNodes.get(j).getNeighbors().keySet());
 
 					Vector<Node> candNodes = new Vector<Node>();
@@ -432,13 +432,13 @@ public class CreateOptimizedHeuristicGraphs3 {
 						Node from = calculatorMain.getNode(highDegreenodes.get(j).getID());
 						Node to = calculatorMain.getNode(highDegreenodes.get(k).getID());
 
-						ConnectionInfo ci2 = from.getConnectionInfo(to);
-						ConnectionInfo ci3 = calculatorMain.getNode(from.getID()).getConnectionInfo(to.getID());
+						Edge ci2 = from.getConnectionInfo(to);
+						Edge ci3 = calculatorMain.getNode(from.getID()).getEdgeInfo(to.getID());
 
-						ConnectionInfo ci ;
-						ci = calculatorMain.getNode(from_id).getConnectionInfo(to_id);
+						Edge ci ;
+						ci = calculatorMain.getNode(from_id).getEdgeInfo(to_id);
 
-						ConnectionInfo control = graphCandidate.getNode(from_id).getConnectionInfo(to_id);
+						Edge control = graphCandidate.getNode(from_id).getEdgeInfo(to_id);
 
 						if(calculatorMain.isNodeAConnectedToNodeB(calculatorMain.getNode(from_id), calculatorMain.getNode(to_id))
 								== true)
@@ -482,8 +482,8 @@ public class CreateOptimizedHeuristicGraphs3 {
 						double TotalEdgeCost = graphCandidate.getNode(from.getID()).getTotalEdgeCost();
 						double MeanEdgeCost = graphCandidate.getNode(from.getID()).getMeanEdgeCost();
 						
-						ConnectionInfo ci = from.getConnectionInfo(to);
-						ConnectionInfo ci2 = calculatorMain.getNode(from.getID()).getConnectionInfo(to.getID());
+						Edge ci = from.getConnectionInfo(to);
+						Edge ci2 = calculatorMain.getNode(from.getID()).getEdgeInfo(to.getID());
 						
 						//Calculate new values for check
 						TotalEdgeCost += ci.getWeight();

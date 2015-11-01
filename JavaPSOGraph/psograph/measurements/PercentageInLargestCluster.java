@@ -20,7 +20,7 @@ package psograph.measurements;
 import java.io.Serializable;
 import java.util.*;
 
-import psograph.graph.ConnectionInfo;
+import psograph.graph.Edge;
 import psograph.graph.Graph;
 import psograph.graph.Node;
 
@@ -143,7 +143,7 @@ public class PercentageInLargestCluster implements Serializable, IGraphMeasument
 				//visit node
 				Node node = m_graph.getHeaderNodesMap().get(prev_node);  
 				
-				TreeMap<Integer,ConnectionInfo> tci = node.getNeighbors();
+				TreeMap<Integer,Edge> tci = node.getNeighbors();
 				if(tci == null)
 				{					
 					NodesByCluster.put(m_cluster_id,NodesInCluster);
@@ -185,7 +185,7 @@ public class PercentageInLargestCluster implements Serializable, IGraphMeasument
 			
 		}
 		
-		int Next(TreeMap<Integer,ConnectionInfo> neighbors)
+		int Next(TreeMap<Integer,Edge> neighbors)
 		{
 			int val = -1;
 			

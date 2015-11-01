@@ -21,7 +21,7 @@ package psograph.measurements;
 import java.io.Serializable;
 import java.util.Vector;
 
-import psograph.graph.ConnectionInfo;
+import psograph.graph.Edge;
 import psograph.graph.Graph;
 import psograph.graph.Node;
 import psograph.graph.NonLinearCostFunction;
@@ -59,7 +59,7 @@ public class AvgLinkLength implements Serializable,IGraphMeasument {
 				continue;
 			}
 			
-			Vector<ConnectionInfo> vci = new Vector<ConnectionInfo>(nodes.get(i).getNeighbors().values());
+			Vector<Edge> vci = new Vector<Edge>(nodes.get(i).getNeighbors().values());
 			
 			double numCI = vci.size();
 			for(int j = 0 ; j < numCI; j++)

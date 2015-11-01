@@ -34,20 +34,14 @@ public class Node implements Serializable
 {
 	static final long serialVersionUID = 35L;	
 	
+	private int m_id;
+	private double m_x;
+	private double m_y;
+	private TreeMap<Integer,Edge> m_connectivityList;
 	private Vector<Path> m_path;
 	
-	private int m_id;
-	
-	private int m_depth =-1;	
-	
-	private double m_x;
-	
-	private double m_y;
-	
-	private TreeMap<Integer,ConnectionInfo> m_connectivityList;
-	
+	private int m_depth =-1;
 	private boolean m_visited = false;
-	
     private int m_longestPath = -1;
 	
 	/** create empty node with specified ID and X,Y location
@@ -56,13 +50,13 @@ public class Node implements Serializable
      * @param x
      * @param y
      */
-	Node(int id, double x, double y)
+	public Node(int id, double x, double y)
 	{
 		m_id = id;
 		m_x = x;
 		m_y = y;
 		m_connectivityList = null;
-		
+		m_path = new Vector<Path>();
 	}
 	
 	
@@ -75,19 +69,26 @@ public class Node implements Serializable
 	 * @param y
 	 * @param connecting_nodes
 	 */
-	Node (int id, double x, double y, int connecting_nodes[])
+	public Node (int id, double x, double y, int connecting_nodes[]) throws Exception
 	{
 		m_path = new Vector<Path>();
 		m_id = id;
 		m_x = x;
 		m_y = y;
 		
-		int size = connecting_nodes.length;
-		m_connectivityList = new TreeMap<Integer,ConnectionInfo>();
-		
-		for(int i=0; i < size; i++)
+		if(connecting_nodes != null)
 		{
-			m_connectivityList.put(connecting_nodes[i], new ConnectionInfo(1));
+			int size = connecting_nodes.length;
+			m_connectivityList = new TreeMap<Integer,Edge>();
+			
+			for(int i=0; i < size; i++)
+			{
+				if(connecting_nodes[i] == id)
+				{
+					throw new Exception("Attempting to connect node to itself");
+				}
+				m_connectivityList.put(connecting_nodes[i], new Edge(1));
+			}
 		}
 	}
 	
@@ -105,12 +106,12 @@ public class Node implements Serializable
 		
 		if(n.m_connectivityList != null)
 		{
-			m_connectivityList = new TreeMap<Integer,ConnectionInfo>();
+			m_connectivityList = new TreeMap<Integer,Edge>();
 			Vector<Integer> vi = new Vector<Integer>(n.m_connectivityList.keySet());
 			int i;
 	
 			for(i = 0; i < vi.size(); i++)
-				m_connectivityList.put(vi.get(i),new ConnectionInfo(n.m_connectivityList.get(vi.get(i))));		
+				m_connectivityList.put(vi.get(i),new Edge(n.m_connectivityList.get(vi.get(i))));		
 		}
 		else
 			m_connectivityList =null;
@@ -128,7 +129,7 @@ public class Node implements Serializable
 	{
 		if(m_connectivityList == null)
 		{
-			m_connectivityList = new TreeMap<Integer,ConnectionInfo>();
+			m_connectivityList = new TreeMap<Integer,Edge>();
 		}
 		else if(id == m_id)
 		{
@@ -139,7 +140,7 @@ public class Node implements Serializable
 			throw new Exception("Node::addConnection - trying to add connection to a node that already exists");
 		}
 		
-		m_connectivityList.put(id, new ConnectionInfo(weight));
+		m_connectivityList.put(id, new Edge(weight));
 
 	}	
 	
@@ -189,9 +190,9 @@ public class Node implements Serializable
 	 * @param n
 	 * @return
 	 */
-	public ConnectionInfo getConnectionInfo(int id)
+	public Edge getEdgeInfo(int id)
 	{
-		ConnectionInfo ci = null;
+		Edge ci = null;
 		ci = m_connectivityList.get(id);
 		return ci;
 	}
@@ -201,9 +202,9 @@ public class Node implements Serializable
 	 * @param n
 	 * @return
 	 */
-	public ConnectionInfo getConnectionInfo(Node n)
+	public Edge getConnectionInfo(Node n)
 	{
-		ConnectionInfo ci = null;
+		Edge ci = null;
 		ci = m_connectivityList.get(n.m_id);
 		return ci;
 	}
@@ -269,7 +270,10 @@ public class Node implements Serializable
 	{
 		double value = 0;
 		
-		value = getTotalEdgeCost()/getDegree();
+		if(m_connectivityList != null)
+		{
+			value = getTotalEdgeCost()/getDegree();
+		}
 		
 		return value;
 	}
@@ -283,7 +287,7 @@ public class Node implements Serializable
 	{
 		TreeMap<Double,Vector<Integer>> neighborDist = new TreeMap<Double,Vector<Integer>>();
 		
-		TreeMap<Integer,ConnectionInfo> neighbors = getNeighbors();
+		TreeMap<Integer,Edge> neighbors = getNeighbors();
 		
 		if(neighbors == null || neighbors.size() == 0)
 			return null;
@@ -293,7 +297,7 @@ public class Node implements Serializable
 		int i ;
 		for(i = 0; i < keylist.size(); i++)
 		{
-				ConnectionInfo ci = neighbors.get(keylist.get(i));
+				Edge ci = neighbors.get(keylist.get(i));
 				double weight = ci.getWeight();
 				
 				if(neighborDist.get(weight) == null)
@@ -310,7 +314,7 @@ public class Node implements Serializable
 	 * ConnectionInfo
 	 * @return
 	 */
-	public TreeMap<Integer,ConnectionInfo> getNeighbors()
+	public TreeMap<Integer,Edge> getNeighbors()
 	{
 		return m_connectivityList;
 	}
@@ -322,7 +326,7 @@ public class Node implements Serializable
 	}
 	
 	/**
-	 * Returns SPL length, if not paths stored returns -1.
+	 * Returns SPL length, if no paths stored returns -1.
 	 */
 	public int getSPLength()
 	{
@@ -352,6 +356,9 @@ public class Node implements Serializable
 	{
 		double value = 0;
 
+		if(this.m_connectivityList == null)
+			return 0;
+		
 		Vector<Integer> nodes = new Vector<Integer>(m_connectivityList.keySet());
 		
 		for(int i =0; i < nodes.size(); i++)
@@ -410,7 +417,7 @@ public class Node implements Serializable
 	 */
 	public boolean isConnectedTo(int node_id) throws Exception
 	{
-		TreeMap<Integer,ConnectionInfo> neighbors = getNeighbors();
+		TreeMap<Integer,Edge> neighbors = getNeighbors();
 		if(neighbors == null)
 		{
 			return false;

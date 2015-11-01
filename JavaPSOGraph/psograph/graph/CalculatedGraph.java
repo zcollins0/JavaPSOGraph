@@ -1141,14 +1141,14 @@ public class CalculatedGraph extends Graph implements Serializable
 		{
 			Node node = vec.get(i);
 			
-			Vector<ConnectionInfo> nei = new Vector<ConnectionInfo>(node.getNeighbors().values());
+			Vector<Edge> nei = new Vector<Edge>(node.getNeighbors().values());
 			
 			
 			Vector<Double> lengths = new Vector<Double>();
 			
 			for(int j=0; j < nei.size(); j++)
 			{
-				ConnectionInfo ci = nei.get(j);
+				Edge ci = nei.get(j);
 				double val = ci.getWeight();
 				double real_value = NonLinearCostFunction.getDistance(val);
 				
@@ -1176,14 +1176,14 @@ public class CalculatedGraph extends Graph implements Serializable
 		{
 			Node node = vec.get(i);
 			
-			Vector<ConnectionInfo> nei = new Vector<ConnectionInfo>(node.getNeighbors().values());
+			Vector<Edge> nei = new Vector<Edge>(node.getNeighbors().values());
 			
 			
 			Vector<Double> lengths = new Vector<Double>();
 			
 			for(int j=0; j < nei.size(); j++)
 			{
-				ConnectionInfo ci = nei.get(j);
+				Edge ci = nei.get(j);
 				double val = ci.getWeight();
 				double real_value = NonLinearCostFunction.getDistance(val);
 				
@@ -1214,14 +1214,14 @@ public class CalculatedGraph extends Graph implements Serializable
 		{
 			Node node = vec.get(i);
 			
-			Vector<ConnectionInfo> nei = new Vector<ConnectionInfo>(node.getNeighbors().values());
+			Vector<Edge> nei = new Vector<Edge>(node.getNeighbors().values());
 			
 			
 			Vector<Double> lengths = new Vector<Double>();
 			
 			for(int j=0; j < nei.size(); j++)
 			{
-				ConnectionInfo ci = nei.get(j);
+				Edge ci = nei.get(j);
 				double val = ci.getWeight();
 				double real_value = NonLinearCostFunction.getDistance(val);
 				

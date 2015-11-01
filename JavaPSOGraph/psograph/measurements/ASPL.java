@@ -21,7 +21,7 @@ import java.util.LinkedList;
 import java.util.TreeMap;
 import java.util.Vector;
 
-import psograph.graph.ConnectionInfo;
+import psograph.graph.Edge;
 import psograph.graph.Graph;
 import psograph.graph.Node;
 
@@ -137,7 +137,7 @@ public class ASPL implements Serializable, IGraphMeasument
 			Node node = g.getHeaderNodesMap().get(u);  
 			
 				
-			TreeMap<Integer,ConnectionInfo> tci = node.getNeighbors();
+			TreeMap<Integer,Edge> tci = node.getNeighbors();
 			if(tci == null)
 			{		
 				continue;

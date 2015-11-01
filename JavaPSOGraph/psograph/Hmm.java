@@ -24,7 +24,7 @@ import java.util.TreeMap;
 import java.util.Vector;
 
 import psograph.graph.CalculatedGraph;
-import psograph.graph.ConnectionInfo;
+import psograph.graph.Edge;
 import psograph.graph.Graph;
 import psograph.graph.Node;
 import psograph.graph.NodeLocationCalculator;
@@ -113,7 +113,7 @@ public class Hmm
 				Vector<Node> candNodes = new Vector<Node>();
 				
 				System.out.println(j+" iter");
-				TreeMap<Integer,ConnectionInfo> neighbors = vNodes.get(j).getNeighbors();
+				TreeMap<Integer,Edge> neighbors = vNodes.get(j).getNeighbors();
 				Vector<Integer> vNodeIds = new Vector<Integer> (vNodes.get(j).getNeighbors().keySet());
 				for(int k = 0; k < vNodeIds.size(); k++)
 				{
