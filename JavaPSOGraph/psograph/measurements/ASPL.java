@@ -167,7 +167,7 @@ public class ASPL implements Serializable, IGraphMeasument
 			if(g.getHeaderNodesMap().get(vhn.get(i)).getID() == NodeId)
 				continue;
 			
-			if(calcValues.getHeaderNodesMap().get(NodeId).isConnectedTo(g.getHeaderNodesMap().get(vhn.get(i)).getID()) == false)
+			if(calcValues.getHeaderNodesMap().get(NodeId).isConnectedTo(g.getHeaderNodesMap().get(vhn.get(i))) == false)
 			{
 				calcValues.addConnection(NodeId, g.getHeaderNodesMap().get(vhn.get(i)).getID(), g.getHeaderNodesMap().get(vhn.get(i)).getDepth());
 			}

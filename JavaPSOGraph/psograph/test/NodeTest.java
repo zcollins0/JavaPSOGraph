@@ -22,6 +22,19 @@ import psograph.graph.Node;
 public class NodeTest 
 {
 
+	
+	/** The following methods do not have Unit Tests since 
+	 * we use them to validate the other methods
+	 * Test method for {@link psograph.graph.Node#getDegree()}.
+	 * Test method for {@link psograph.graph.Node#getDepth()}.
+	 * Test method for {@link psograph.graph.Node#getID()}.
+	 * Test method for {@link psograph.graph.Node#getMeanEdgeCost()}.
+	 * Test method for {@link psograph.graph.Node#getTotalEdgeCost()}.
+	 * Test method for {@link psograph.graph.Node#getX()}.
+	 * Test method for {@link psograph.graph.Node#getY()}.
+	 * Test method for {@link psograph.graph.Node#getNeighborDistribution()}.
+	 */	
+	
 	/**
 	 * @throws java.lang.Exception
 	 */
@@ -54,7 +67,7 @@ public class NodeTest
 		
 		assertTrue(n.getDepth() == -1);
 		
-		assertTrue(n.getLPLength()==-1);
+		assertTrue(n.getLongestPathLength()==-1);
 		
 		assertTrue(n.getMeanEdgeCost() == 0);
 		
@@ -92,7 +105,7 @@ public class NodeTest
 		
 		assertTrue(n.getDepth() == -1);
 		
-		assertTrue(n.getLPLength()==-1);
+		assertTrue(n.getLongestPathLength()==-1);
 		
 		assertTrue(n.getMeanEdgeCost() == 0);
 		
@@ -150,7 +163,7 @@ public class NodeTest
 		
 		assertTrue(n.getDepth() == -1);
 		
-		assertTrue(n.getLPLength()==-1);
+		assertTrue(n.getLongestPathLength()==-1);
 		
 		assertTrue(n.getMeanEdgeCost() == 1);
 		
@@ -188,15 +201,83 @@ public class NodeTest
 	 */
 	@Test
 	public void testNodeNode() {
+		//TODO: need to decide behavior
 		fail("Not yet implemented");
 	}
 
 	/**
 	 * Test method for {@link psograph.graph.Node#addConnection(int, double)}.
+	 * @throws Exception 
 	 */
 	@Test
-	public void testAddConnection() {
-		fail("Not yet implemented");
+	public void testAddConnection() throws Exception 
+	{
+		Node n = new Node(1, .5, .4);
+		
+		n.addConnection(2, .28);
+		try
+		{
+			n.addConnection(2, .28);
+		}
+		catch (Exception e)
+		{
+			//from adding in with duplicate ID
+		}
+		
+		n.addConnection(3, .18);
+		
+		n.addConnection(5, .08);
+		
+		assertTrue(n.getID() == 1);
+		
+		assertTrue(Double.compare(.5, n.getX()) == 0);
+		
+		assertTrue(Double.compare(.4, n.getY()) == 0);
+		
+		assertTrue(n.getDegree() == 3);
+		
+		assertTrue(n.getDepth() == -1);
+		
+		assertTrue(n.getLongestPathLength()==-1);
+		
+		assertTrue(Double.compare(n.getMeanEdgeCost(),0.18000000000000002)==0);
+		
+		TreeMap<Double,Vector<Integer>> neighborDist = n.getNeighborDistribution();
+		
+		assertTrue(neighborDist != null);
+		
+		assertTrue(neighborDist.keySet().size() == 3);
+		
+		Vector<Integer> nodeIds = neighborDist.get(.08);
+		
+		assertTrue(nodeIds.contains(5)== true);
+
+		 nodeIds = neighborDist.get(.18);
+		
+		assertTrue(nodeIds.contains(3)== true);
+
+		nodeIds = neighborDist.get(.28);
+		
+		assertTrue(nodeIds.contains(2)== true);
+	
+		
+		TreeMap<Integer, Edge> neighbors = n.getNeighbors();
+		
+		assertTrue(neighbors.size() == 3);
+		
+		assertTrue(Double.compare(neighbors.get(5).getWeight() , .08)==0);
+		assertTrue(Double.compare(neighbors.get(3).getWeight() , .18)==0);
+		assertTrue(Double.compare(neighbors.get(2).getWeight() , .28)==0);
+		
+		assertTrue(n.getPaths().size() == 0);
+		
+		assertTrue(n.getSPLength() == -1);
+		
+		assertTrue(n.getTotalEdgeCost() == .54);
+		
+		assertTrue(n.getVisited()==false);		
+		
+		
 	}
 
 	/**
@@ -209,51 +290,86 @@ public class NodeTest
 
 	/**
 	 * Test method for {@link psograph.graph.Node#equals(java.lang.Object)}.
+	 * @throws Exception 
 	 */
 	@Test
-	public void testEqualsObject() {
-		fail("Not yet implemented");
-	}
-
-	/**
-	 * Test method for {@link psograph.graph.Node#getEdgeInfo(int)}.
-	 */
-	@Test
-	public void testGetConnectionInfoInt() {
-		fail("Not yet implemented");
+	public void testEqualsObject() throws Exception 
+	{
+		Node n1 = new Node(1, .5, .4);
+		n1.addConnection(3, .28);
+		n1.addConnection(4, .18);
+		n1.addConnection(6, .08);
+	
+		Node n2 = new Node(1, .5, .4);
+		n2.addConnection(3, .28);
+		n2.addConnection(4, .18);
+		n2.addConnection(6, .08);
+		
+		Node n3 = new Node(1, .4, .4);
+		n3.addConnection(3, .28);
+		n3.addConnection(4, .18);
+		n3.addConnection(6, .08);
+		
+		Node n3a = new Node(1, .5, .2);
+		n3a.addConnection(3, .28);
+		n3a.addConnection(4, .18);
+		n3a.addConnection(6, .08);	
+		
+		Node n4 = new Node(1, .5, .4);
+		n4.addConnection(3, .28);
+		n4.addConnection(6, .08);		
+	
+		Node n5 = new Node(1, .5, .4);
+		n5.addConnection(3, .18);
+		n5.addConnection(4, .18);
+		n5.addConnection(6, .08);			
+		
+		Node n6 = new Node(1, .5, .4);
+		n6.addConnection(3, .28);
+		n6.addConnection(7, .18);
+		n6.addConnection(6, .08);	
+		
+		assertTrue(n1.equals(n2));
+		
+		assertFalse(n1.equals(n3));
+		
+		assertFalse(n1.equals(n3a));
+		
+		assertFalse(n1.equals(n4));
+		
+		assertFalse(n1.equals(n5));
+		
+		assertFalse(n1.equals(n6));
 	}
 
 	/**
 	 * Test method for {@link psograph.graph.Node#getConnectionInfo(psograph.graph.Node)}.
+	 * @throws Exception 
 	 */
 	@Test
-	public void testGetConnectionInfoNode() {
-		fail("Not yet implemented");
+	public void testGetConnectionInfoNode() throws Exception 
+	{
+		Node n1 = new Node(1, .5, .4);
+		n1.addConnection(3, .28);
+		n1.addConnection(4, .18);
+		n1.addConnection(6, .08);
+		
+		Node n3 = new Node(3,.1, .1);
+		Node n4 = new Node(4,.1, .1);
+		Node n6 = new Node(6,.1, .1);
+		Node n7 = new Node(7,.1, .1);
+		
+		assertTrue(Double.compare(n1.getConnectionInfo(n3).getWeight(),.28)==0);
+		assertTrue(Double.compare(n1.getConnectionInfo(n4).getWeight(),.18)==0);
+		assertTrue(Double.compare(n1.getConnectionInfo(n6).getWeight(),.08)==0);
+		
+		assertTrue(n1.getConnectionInfo(n7) == null);		
+
 	}
 
-	/**
-	 * Test method for {@link psograph.graph.Node#getDegree()}.
-	 */
-	@Test
-	public void testGetDegree() {
-		fail("Not yet implemented");
-	}
 
-	/**
-	 * Test method for {@link psograph.graph.Node#getDepth()}.
-	 */
-	@Test
-	public void testGetDepth() {
-		fail("Not yet implemented");
-	}
 
-	/**
-	 * Test method for {@link psograph.graph.Node#getID()}.
-	 */
-	@Test
-	public void testGetID() {
-		fail("Not yet implemented");
-	}
+
 
 	/**
 	 * Test method for {@link psograph.graph.Node#getPaths()}.
@@ -264,36 +380,10 @@ public class NodeTest
 	}
 
 	/**
-	 * Test method for {@link psograph.graph.Node#getLPLength()}.
+	 * Test method for {@link psograph.graph.Node#getLongestPathLength()}.
 	 */
 	@Test
-	public void testGetLPLength() {
-		fail("Not yet implemented");
-	}
-
-	/**
-	 * Test method for {@link psograph.graph.Node#getMeanEdgeCost()}.
-	 */
-	@Test
-	public void testGetMeanEdgeCost() {
-		fail("Not yet implemented");
-	}
-
-	/**
-	 * Test method for {@link psograph.graph.Node#getNeighborDistribution()}.
-	 * @throws Exception 
-	 */
-	@Test
-	public void testGetNeighborDistribution() throws Exception 
-	{
-		int connectedTo[] = {2,3,4};
-		
-		Node n = new Node(1, .5, .3, connectedTo);
-		
-		TreeMap<Double,Vector<Integer>> neighborDist = n.getNeighborDistribution();
-		
-		assertTrue(neighborDist != null);
-		
+	public void testLongestPathLength() {
 		fail("Not yet implemented");
 	}
 
@@ -314,34 +404,10 @@ public class NodeTest
 	}
 
 	/**
-	 * Test method for {@link psograph.graph.Node#getTotalEdgeCost()}.
-	 */
-	@Test
-	public void testGetTotalEdgeCost() {
-		fail("Not yet implemented");
-	}
-
-	/**
 	 * Test method for {@link psograph.graph.Node#getVisited()}.
 	 */
 	@Test
 	public void testGetVisited() {
-		fail("Not yet implemented");
-	}
-
-	/**
-	 * Test method for {@link psograph.graph.Node#getX()}.
-	 */
-	@Test
-	public void testGetX() {
-		fail("Not yet implemented");
-	}
-
-	/**
-	 * Test method for {@link psograph.graph.Node#getY()}.
-	 */
-	@Test
-	public void testGetY() {
 		fail("Not yet implemented");
 	}
 
@@ -355,18 +421,46 @@ public class NodeTest
 
 	/**
 	 * Test method for {@link psograph.graph.Node#isConnectedTo(int)}.
+	 * @throws Exception 
 	 */
+	@SuppressWarnings("deprecation")
 	@Test
-	public void testIsConnectedToInt() {
-		fail("Not yet implemented");
+	public void testIsConnectedToInt() throws Exception 
+	{
+		Node n1 = new Node(1, .5, .4);
+		n1.addConnection(3, .28);
+		n1.addConnection(4, .18);
+		n1.addConnection(6, .08);
+		
+		assertTrue(n1.isConnectedTo(3));
+		assertTrue(n1.isConnectedTo(4));
+		assertTrue(n1.isConnectedTo(6));
+		
+		assertFalse(n1.isConnectedTo(7));
+		
 	}
 
 	/**
 	 * Test method for {@link psograph.graph.Node#isConnectedTo(psograph.graph.Node)}.
+	 * @throws Exception 
 	 */
 	@Test
-	public void testIsConnectedToNode() {
-		fail("Not yet implemented");
+	public void testIsConnectedToNode() throws Exception {
+		Node n1 = new Node(1, .5, .4);
+		n1.addConnection(3, .28);
+		n1.addConnection(4, .18);
+		n1.addConnection(6, .08);
+		
+		Node n3 = new Node(3,.1, .1);
+		Node n4 = new Node(4,.1, .1);
+		Node n6 = new Node(6,.1, .1);
+		Node n7 = new Node(7,.1, .1);
+		
+		assertTrue(n1.isConnectedTo(n3));
+		assertTrue(n1.isConnectedTo(n4));
+		assertTrue(n1.isConnectedTo(n6));
+		
+		assertFalse(n1.isConnectedTo(n7));		
 	}
 
 	/**

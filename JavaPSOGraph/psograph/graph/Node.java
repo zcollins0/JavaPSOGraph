@@ -23,7 +23,7 @@ import java.util.*;
 
 
 //TODO this should probably have a reference to parent graph.  And then when doing operations
-//involvling Node objects (not ids), check to make sure the Node is from the same graph.
+//involving Node objects (not ids), check to make sure the Node is from the same graph.
 
 /**
  * This represents a Node in a graph.
@@ -153,7 +153,7 @@ public class Node implements Serializable
 	public void addPath(Path p)
 	{
 		//Only store the path if it is not longer than paths stored
-		int longest = getLPLength();
+		int longest = getLongestPathLength();
 		
 		if(m_path.size() > 0)
 		{
@@ -171,16 +171,54 @@ public class Node implements Serializable
 	}
 	
 	/**
-	 * Comparison of two objects
+	 * Comparison of two Nodes.  This
+	 * does an exhaustive comparison
+	 * which could have performance implications for Nodes
+	 * with large number of neighbors
 	 */
 	public boolean equals (Object obj)
 	{
-		boolean ret = false;
+		boolean ret = true;
 		
 		Node n = (Node)obj;
-		if(n.m_id == m_id)
-			ret = true;
+		if(n.m_id != m_id)
+		{
+			ret = false;
+		}	
+		//Now compare the locations
+		else if(Double.compare(m_x, n.getX()) != 0 ||
+				Double.compare(m_y, n.getY()) != 0)
+		{
+			ret = false;
+		}
+		//See if they have the same degree
+		else if(getDegree() != n.getDegree())
+		{
+			ret = false;
+		}
+		else
+		{
+			//Now check the connections
+			TreeMap<Integer,Edge> m_otherConnectivityList = n.getNeighbors();
 			
+			Vector<Integer> nodes = new Vector<Integer>(m_connectivityList.keySet());
+			Vector<Integer> otherNodes = new Vector<Integer>(m_otherConnectivityList.keySet());
+			
+			if(!nodes.equals(otherNodes))
+			{
+				ret = false;
+			}
+			else 
+			{
+				Vector<Edge> edges = new Vector<Edge>(m_connectivityList.values());
+				Vector<Edge> otherEdges = new Vector<Edge>(m_otherConnectivityList.values());
+				if(!edges.equals(otherEdges))
+				{
+					ret = false;
+				}
+			}
+		}
+		
 		return ret;
 	}
 	
@@ -198,7 +236,8 @@ public class Node implements Serializable
 	}
 	
 	/**
-	 * Returns the connection info between his node and Node n.
+	 * Returns the connection info between this node and Node n.
+	 * If none exist this will return null.
 	 * @param n
 	 * @return
 	 */
@@ -246,7 +285,7 @@ public class Node implements Serializable
 	 * Return longest Path's length
 	 * @return
 	 */
-	public int getLPLength()
+	public int getLongestPathLength()
 	{
 //		int result = -1;
 //		
@@ -409,7 +448,9 @@ public class Node implements Serializable
 	}
 	
 	
-	/**Returns if Node is connected to node specifed by id
+	/**Returns if Node is connected to node specified by id
+	 * 
+	 * @deprecated use the Node version instead
 	 * 
 	 * @param n
 	 * @return

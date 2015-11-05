@@ -51,6 +51,24 @@ public class Edge implements Serializable
 		m_weight = weight;
 
 	}
+	
+	/**
+	 * Comparison of two objects
+	 */
+	public boolean equals (Object obj)
+	{
+		boolean ret = true;
+		
+		Edge e = (Edge)obj;
+		
+		if(Double.compare(m_weight, e.getWeight()) != 0)
+		{
+			ret = false;
+		}
+		return ret;
+		
+	}
+	
 	/**
 	 * Mutator for weight value.
 	 * @param weight
