@@ -8,8 +8,6 @@ import static org.junit.Assert.*;
 import java.util.TreeMap;
 import java.util.Vector;
 
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 import psograph.graph.Edge;
@@ -33,21 +31,24 @@ public class NodeTest
 	 * Test method for {@link psograph.graph.Node#getX()}.
 	 * Test method for {@link psograph.graph.Node#getY()}.
 	 * Test method for {@link psograph.graph.Node#getNeighborDistribution()}.
+	 * Test method for {@link psograph.graph.Node#getNeighbors()}.
 	 */	
 	
-	/**
-	 * @throws java.lang.Exception
-	 */
-	@BeforeClass
-	public static void setUpBeforeClass() throws Exception {
-	}
+	/** These will be tested in the SPL testcase
+	 * Test method for {@link psograph.graph.Node#getPaths()}.
+	 * Test method for {@link psograph.graph.Node#getLongestPathLength()}.
+	 * Test method for {@link psograph.graph.Node#getSPLength()}.
+	 * Test method for {@link psograph.graph.Node#getVisited()}.
+	 * Test method for {@link psograph.graph.Node#hasSPLTo(int)}.
+	 * Test method for {@link psograph.graph.Node#numberOfSPLNodeParticipatesIn(int, psograph.graph.Node)}.
+	 * Test method for {@link psograph.graph.Node#numOfSPLength()}.
+	 * Test method for {@link psograph.graph.Node#setDepth(int)}.
+	 * Test method for {@link psograph.graph.Node#setPath(java.util.Vector)}.
+	 * Test method for {@link psograph.graph.Node#setVisited(boolean)}.
+	 * Test method for {@link psograph.graph.Node#addPath(psograph.graph.Path)}.
+	 * */
+	
 
-	/**
-	 * @throws java.lang.Exception
-	 */
-	@Before
-	public void setUp() throws Exception {
-	}
 
 	/**
 	 * Test method for {@link psograph.graph.Node#Node(int, double, double)}.
@@ -196,14 +197,7 @@ public class NodeTest
 		assertTrue(n.getVisited()==false);
 	}		
 	
-	/**
-	 * Test method for {@link psograph.graph.Node#Node(psograph.graph.Node)}.
-	 */
-	@Test
-	public void testNodeNode() {
-		//TODO: need to decide behavior
-		fail("Not yet implemented");
-	}
+
 
 	/**
 	 * Test method for {@link psograph.graph.Node#addConnection(int, double)}.
@@ -280,13 +274,7 @@ public class NodeTest
 		
 	}
 
-	/**
-	 * Test method for {@link psograph.graph.Node#addPath(psograph.graph.Path)}.
-	 */
-	@Test
-	public void testAddPath() {
-		fail("Not yet implemented");
-	}
+
 
 	/**
 	 * Test method for {@link psograph.graph.Node#equals(java.lang.Object)}.
@@ -368,57 +356,6 @@ public class NodeTest
 	}
 
 
-
-
-
-	/**
-	 * Test method for {@link psograph.graph.Node#getPaths()}.
-	 */
-	@Test
-	public void testGetPaths() {
-		fail("Not yet implemented");
-	}
-
-	/**
-	 * Test method for {@link psograph.graph.Node#getLongestPathLength()}.
-	 */
-	@Test
-	public void testLongestPathLength() {
-		fail("Not yet implemented");
-	}
-
-	/**
-	 * Test method for {@link psograph.graph.Node#getNeighbors()}.
-	 */
-	@Test
-	public void testGetNeighbors() {
-		fail("Not yet implemented");
-	}
-
-	/**
-	 * Test method for {@link psograph.graph.Node#getSPLength()}.
-	 */
-	@Test
-	public void testGetSPLength() {
-		fail("Not yet implemented");
-	}
-
-	/**
-	 * Test method for {@link psograph.graph.Node#getVisited()}.
-	 */
-	@Test
-	public void testGetVisited() {
-		fail("Not yet implemented");
-	}
-
-	/**
-	 * Test method for {@link psograph.graph.Node#hasSPLTo(int)}.
-	 */
-	@Test
-	public void testHasSPLTo() {
-		fail("Not yet implemented");
-	}
-
 	/**
 	 * Test method for {@link psograph.graph.Node#isConnectedTo(int)}.
 	 * @throws Exception 
@@ -461,53 +398,59 @@ public class NodeTest
 		assertTrue(n1.isConnectedTo(n6));
 		
 		assertFalse(n1.isConnectedTo(n7));		
-	}
-
-	/**
-	 * Test method for {@link psograph.graph.Node#numberOfSPLNodeParticipatesIn(int, psograph.graph.Node)}.
-	 */
-	@Test
-	public void testNumberOfSPLNodeParticipatesIn() {
-		fail("Not yet implemented");
-	}
-
-	/**
-	 * Test method for {@link psograph.graph.Node#numOfSPLength()}.
-	 */
-	@Test
-	public void testNumOfSPLength() {
-		fail("Not yet implemented");
-	}
-
+	}	
+	
 	/**
 	 * Test method for {@link psograph.graph.Node#removeConnection(int)}.
+	 * @throws Exception 
 	 */
 	@Test
-	public void testRemoveConnection() {
-		fail("Not yet implemented");
-	}
+	public void testRemoveConnection() throws Exception 
+	{
+		Node n = new Node(1, .5, .4);
+		
+		n.addConnection(2, .28);
+		n.addConnection(3, .18);
+    	n.addConnection(5, .08);
+    	
+    	try
+    	{
+    		n.removeConnection(1);
+    	}
+    	catch(Exception e)
+    	{
+    		//remove self
+    	}
+    	
+    	try
+    	{
+    		n.removeConnection(7);
+    	}
+    	catch(Exception e)
+    	{
+    		//remove non-existant
+    	}
+    	
+    	n.removeConnection(2);
+    	
+    	assertTrue(n.getDegree()== 2);
+    	
+    	n.removeConnection(3);
+    	
+    	assertTrue(n.getDegree()== 1);
+    	
+    	n.removeConnection(5);
+    	
+    	assertTrue(n.getDegree()== 0);
+	
+	}	
 
 	/**
-	 * Test method for {@link psograph.graph.Node#setDepth(int)}.
+	 * Test method for {@link psograph.graph.Node#Node(psograph.graph.Node)}.
 	 */
 	@Test
-	public void testSetDepth() {
-		fail("Not yet implemented");
-	}
-
-	/**
-	 * Test method for {@link psograph.graph.Node#setPath(java.util.Vector)}.
-	 */
-	@Test
-	public void testSetPath() {
-		fail("Not yet implemented");
-	}
-
-	/**
-	 * Test method for {@link psograph.graph.Node#setVisited(boolean)}.
-	 */
-	@Test
-	public void testSetVisited() {
+	public void testNodeNode() {
+		//TODO: need to decide behavior
 		fail("Not yet implemented");
 	}
 

@@ -1,4 +1,4 @@
-// This is a library to be used to represent a Graph and various measurments for a Graph
+// This is a library to be used to represent a Graph and various measurements for a Graph
 //  and to perform optimization using Particle Swarm Optimization (PSO)
 //    Copyright (C) 2008, 2015 
 //       Patrick Olekas - polekas55@gmail.com
