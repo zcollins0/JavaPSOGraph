@@ -17,8 +17,9 @@ import psograph.graph.Node;
  * @author Patrick
  *
  */
-public class NodeTest 
+public class NodeTest  
 {
+
 
 	
 	/** The following methods do not have Unit Tests since 
@@ -447,11 +448,22 @@ public class NodeTest
 
 	/**
 	 * Test method for {@link psograph.graph.Node#Node(psograph.graph.Node)}.
+	 * @throws Exception 
 	 */
 	@Test
-	public void testNodeNode() {
-		//TODO: need to decide behavior
-		fail("Not yet implemented");
+	public void testNodeNode() throws Exception 
+	{
+		Node n = new Node(1, .5, .4);
+		
+		n.addConnection(2, .28);
+		n.addConnection(3, .18);
+    	n.addConnection(5, .08);
+    	
+    	Node n2 = new Node(n);
+    	
+    	
+		assertTrue(n.equals(n2));
+		
 	}
 
 }

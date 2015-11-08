@@ -42,48 +42,6 @@ public class TestMeasurements3 {
 		
 	}
 	
-	@Test
-	public void testSPL() throws Exception
-	{
-		m_graph = TestUtils.createTestGraph17();
-		m_calcGraph = new CalculatedGraph(m_graph);
-		m_calcGraph.setCostBasis(5);
-		m_calcGraph.UpdateCalcuations();
-		
-		SPL spl = new SPL(m_calcGraph);
-		Graph graphs[] = spl.Measure();
-		
-		m_calcGraph.print();
-		
-		for(int iGraph = 0; iGraph < graphs.length; iGraph++)
-		{
-			
-		    System.out.println("");
-			for(int i =0; i < graphs[iGraph].getNumberOfNodes() ; i++)
-			{
-				Node n = graphs[iGraph].getNode(i);
-				Vector<Path> vPaths = n.getPaths();
-				
-
-				//System.out.println("Number of paths from "+ iGraph +" to "+n.getID()+" is " + vPaths.size());
-
-				for(int j = 0; j < vPaths.size(); j++)
-				{
-					Path p = vPaths.get(j);
-
-					System.out.print("start of path "+ p.getStart().getID()+" ");
-					for(int k =0; k < p.getLength(); k++)
-					{
-						Node n2 = p.getPath().get(k);
-						int id = n2.getID();
-						System.out.print(" " + id);
-					}
-					System.out.println(": Path Length " + p.getLength());					
-				}
-			}
-		}
-		
-	}
 	
 
 	@Test

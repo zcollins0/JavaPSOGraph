@@ -92,18 +92,13 @@ public class Node implements Serializable
 		}
 	}
 	
-	//TODO need to copy the m_path vector, does not copy it
 	/**
 	 * Copy constructor.  need to copy the m_path vector, does not copy it
 	 * @param n
 	 */
-	Node (Node n)
+	public Node (Node n)
 	{		
-		m_path = new Vector<Path>();
-		m_id = n.m_id;
-		m_x = n.m_x;
-		m_y = n.m_y;
-		
+
 		if(n.m_connectivityList != null)
 		{
 			m_connectivityList = new TreeMap<Integer,Edge>();
@@ -116,7 +111,13 @@ public class Node implements Serializable
 		else
 			m_connectivityList =null;
 		
-		m_visited = n.m_visited;	
+		m_depth = n.m_depth;
+		m_id = n.m_id;
+		m_longestPath = n.m_longestPath;
+		m_path = new Vector<Path>(n.m_path);
+		m_visited = n.m_visited;
+		m_x = n.m_x;
+		m_y = n.m_y;
 	}
 
 	/**
