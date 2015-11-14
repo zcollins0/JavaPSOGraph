@@ -51,37 +51,52 @@ public class SPLTest
 		m_calcGraph.UpdateCalcuations();
 		
 		SPL spl = new SPL(m_calcGraph);
-		Graph graphs[] = spl.Measure();
+		Graph graphs[] = spl.measure();
 		
 		m_calcGraph.print();
 		
-		for(int iGraph = 0; iGraph < graphs.length; iGraph++)
+		spl.print();
+
+		//Node 0
+		Graph node0Graph = graphs[0];
+		Node node0 = node0Graph.getNode(0);
+		Vector<Path> vPaths = node0.getPaths();
+		assertTrue(vPaths.size()==0);
+/*		
+		Number of paths from 0 to 0 is 1
+		start of path 0 : Path Length 0
+		Number of paths from 0 to 1 is 1
+		start of path 0  1: Path Length 1
+		Number of paths from 0 to 2 is 1
+		start of path 0  2: Path Length 1
+		Number of paths from 0 to 3 is 1
+		start of path 0  3: Path Length 1
+		Number of paths from 0 to 4 is 2
+		start of path 0  1 7 4: Path Length 3
+		start of path 0  2 7 4: Path Length 3
+		Number of paths from 0 to 5 is 1
+		start of path 0  3 5: Path Length 2
+		Number of paths from 0 to 6 is 3
+		start of path 0  1 7 6: Path Length 3
+		start of path 0  2 7 6: Path Length 3
+		start of path 0  3 5 6: Path Length 3
+		Number of paths from 0 to 7 is 2
+		start of path 0  1 7: Path Length 2
+		start of path 0  2 7: Path Length 2
+		*/
+		/*
+		for(int iGraph = 0; iGraph < m_solns.length; iGraph++)
 		{
-			
 		    System.out.println("");
-			for(int i =0; i < graphs[iGraph].getNumberOfNodes() ; i++)
+			for(int i =0; i < m_solns[iGraph].getNumberOfNodes() ; i++)
 			{
-				Node n = graphs[iGraph].getNode(i);
+				Node n = m_solns[iGraph].getNode(i);
 				Vector<Path> vPaths = n.getPaths();
-				
-
-				//System.out.println("Number of paths from "+ iGraph +" to "+n.getID()+" is " + vPaths.size());
-
+				System.out.println("Number of paths from "+ iGraph +" to "+n.getID()+" is " + vPaths.size());
 				for(int j = 0; j < vPaths.size(); j++)
 				{
 					Path p = vPaths.get(j);
-
-					System.out.print("start of path "+ p.getStart().getID()+" ");
-					for(int k =0; k < p.getLength(); k++)
-					{
-						Node n2 = p.getPath().get(k);
-						int id = n2.getID();
-						System.out.print(" " + id);
-					}
-					System.out.println(": Path Length " + p.getLength());					
-				}
-			}
-		}
+		*/
 		
 	}
 

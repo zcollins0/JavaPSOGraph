@@ -228,7 +228,7 @@ public class CalculatedGraph extends Graph implements Serializable
 		nodeLocationCalculator.calculateResults();
 		
 		SPL SPL_measure = new SPL(nodeLocationCalculator);
-		Graph graphs[] = SPL_measure.Measure(); 
+		Graph graphs[] = SPL_measure.measure(); 
 		
 		if(graphs == null)
 			return null;
@@ -964,7 +964,7 @@ public class CalculatedGraph extends Graph implements Serializable
 	private void generateSPLGraphs() throws Exception
 	{
 		SPL SPL_measure = new SPL(this);
-		SPLGraphs = SPL_measure.Measure(); 
+		SPLGraphs = SPL_measure.measure(); 
 	}
 
 	/**

@@ -20,6 +20,7 @@ package psograph.measurements;
 
 import java.io.Serializable;
 import java.util.LinkedList;
+import java.util.TreeMap;
 import java.util.Vector;
 
 import psograph.graph.Graph;
@@ -29,15 +30,22 @@ import psograph.graph.Path;
  
 public class SPL  implements  Serializable {
 
+	Graph m_graph; // the original graph
+	Graph m_solns[];
+	TreeMap<Integer,Graph> m_solnTree;
+	boolean m_isCalculated;
+	
+	private static final long serialVersionUID = -3199607653710066896L;
 	/**
 	 * 
+	 * @param g
 	 */
-	private static final long serialVersionUID = -3199607653710066896L;
 	public SPL(Graph g)
 	{
 		m_graph = g;
 		m_isCalculated = false;
 		m_solns = new Graph[m_graph.getNumberOfNodes()];
+		m_solnTree = new TreeMap<Integer,Graph>();
 	}
 	
 
@@ -53,15 +61,20 @@ public class SPL  implements  Serializable {
 			m_solns[i] = evaulateNodeWithBFS(vhn.get(i), totallyTemp);
 			//System.out.println(" completed");
 		}
-		
 		m_isCalculated = true;
-
-		
 	}
 	
+	public Graph[] getCaluclatedSolution() throws Exception
+	{
+		if(this.isCalculated() == false)
+		{
+			throw new Exception("Measure needs to be called");
+		}
+		return this.m_solns;
+	}
 
 	
-	public Graph[] Measure() throws Exception
+	public Graph[] measure() throws Exception
 	{
 		if(m_graph.isFullyConnected() == false)
 		{
@@ -134,11 +147,37 @@ public class SPL  implements  Serializable {
 	{
 		return m_isCalculated;
 	}
+
+
+	public void print() throws Exception 
+	{
+		for(int iGraph = 0; iGraph < m_solns.length; iGraph++)
+		{
+		    System.out.println("");
+			for(int i =0; i < m_solns[iGraph].getNumberOfNodes() ; i++)
+			{
+				Node n = m_solns[iGraph].getNode(i);
+				Vector<Path> vPaths = n.getPaths();
+				System.out.println("Number of paths from "+ iGraph +" to "+n.getID()+" is " + vPaths.size());
+				for(int j = 0; j < vPaths.size(); j++)
+				{
+					Path p = vPaths.get(j);
+
+					System.out.print("start of path "+ p.getStart().getID()+" ");
+					for(int k =0; k < p.getLength(); k++)
+					{
+						Node n2 = p.getPath().get(k);
+						int id = n2.getID();
+						System.out.print(" " + id);
+					}
+					System.out.println(": Path Length " + p.getLength());					
+				}
+			}
+		}
+		
+	}
 	
-	Graph m_graph; // the original graph
-	Graph m_solns[];
-	boolean m_isCalculated;
-	
+
 	
 	
 
