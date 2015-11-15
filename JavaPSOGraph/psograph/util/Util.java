@@ -18,10 +18,12 @@
 //   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 package psograph.util;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.ObjectInput;
 import java.io.ObjectInputStream;
@@ -45,6 +47,25 @@ public class Util {
 
 	//public static String baseDirectory = new String("C:\\ThesisBaseDir\\");
 	public static int i =0;
+	
+	public static String readTextFile(String  file)throws Exception
+	{
+		String everything;
+		
+		try(BufferedReader br = new BufferedReader(new FileReader(file))) 
+		{
+		    StringBuilder sb = new StringBuilder();
+		    String line = br.readLine();
+
+		    while (line != null) {
+		        sb.append(line);
+		        sb.append(System.lineSeparator());
+		        line = br.readLine();
+		    }
+		    everything = sb.toString();
+		}
+		return everything;
+	}
 	
 	public static File CreateCalculatedGraphDirectory(File seedDirectory) throws Exception
 	{

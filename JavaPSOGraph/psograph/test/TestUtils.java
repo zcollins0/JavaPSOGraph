@@ -18,10 +18,72 @@
 //   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 package psograph.test;
 
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.StringReader;
+
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+
+
 import psograph.graph.Graph;
+
 
 public class TestUtils 
 {
+	
+    // Helper method for get the file content
+    static List<String> fileToLines(File file) 
+    {
+            List<String> lines = new LinkedList<String>();
+            String line = "";
+            try {
+                    BufferedReader in = new BufferedReader(new FileReader(file));
+                    while ((line = in.readLine()) != null) {
+                            lines.add(line);
+                    }
+                    in.close();
+            } catch (IOException e) {
+                    e.printStackTrace();
+            }
+            
+            return lines;
+    }	
+    
+    static List<String> stringToLines(String str) throws IOException
+    {
+        BufferedReader rdr = new BufferedReader(new StringReader(str));
+        List<String> lines = new ArrayList<String>();
+        for (String line = rdr.readLine(); line != null; line = rdr.readLine()) {
+            lines.add(line);
+        }
+        rdr.close();
+        
+        return lines;
+    }
+    
+
+	
+    // Helper method for get the file content
+    static List<String> fileToLines(String filename) 
+    {
+            List<String> lines = new LinkedList<String>();
+            String line = "";
+            try {
+                    BufferedReader in = new BufferedReader(new FileReader(filename));
+                    while ((line = in.readLine()) != null) {
+                            lines.add(line);
+                    }
+                    in.close();
+            } catch (IOException e) {
+                    e.printStackTrace();
+            }
+            return lines;
+    }
 
 	static public Graph createTestGraph3()  throws Exception
 	{
@@ -485,7 +547,12 @@ public class TestUtils
 		return tt;
 	}
 
-
+	/**
+	 * This will create a square graph where each node 0 is connected to
+	 * the other 3 nodes
+	 * @return
+	 * @throws Exception
+	 */
 	public static Graph createSquareGraph() throws Exception 
 	{
 		Graph tt = new Graph(0);
@@ -507,5 +574,30 @@ public class TestUtils
 
 	}
 
+	/**
+	 * This will create a square graph where each node is connected to
+	 * 2 other nodes, thus making a classic square.
+	 * @return
+	 * @throws Exception
+	 */
+	public static Graph createSquareGraph2() throws Exception 
+	{
+		Graph tt = new Graph(0);
+		
+		tt.addNodeLocationDataOnly(.1,.1);
+		tt.addNodeLocationDataOnly(.1,.2);
+		tt.addNodeLocationDataOnly(.2, .1);
+		tt.addNodeLocationDataOnly(.2, .2);
+
+		tt.addConnection(0, 1);
+		tt.addConnection(0, 2);
+		
+		tt.addConnection(1, 3);
+		
+		tt.addConnection(2, 3);
+		
+		return tt;
+
+	}
 
 }

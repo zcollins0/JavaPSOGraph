@@ -38,8 +38,8 @@ public class Node implements Serializable
 	private double m_x;
 	private double m_y;
 	private TreeMap<Integer,Edge> m_connectivityList;
-	private Vector<Path> m_path;
 	
+	private Vector<Path> m_path;
 	private int m_depth =-1;
 	private boolean m_visited = false;
     private int m_longestPath = -1;

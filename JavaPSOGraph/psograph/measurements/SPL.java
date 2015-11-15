@@ -148,38 +148,92 @@ public class SPL  implements  Serializable {
 		return m_isCalculated;
 	}
 
-
-	public void print() throws Exception 
+	public StringBuilder print() throws Exception 
 	{
+		return printInternal(false);
+	}
+	
+	public StringBuilder printForValidation() throws Exception 
+	{
+		return printInternal(true);
+	}
+	
+
+	public StringBuilder printInternal(boolean forValidation) throws Exception 
+	{
+		StringBuilder sb = new StringBuilder();
+		
 		for(int iGraph = 0; iGraph < m_solns.length; iGraph++)
 		{
-		    System.out.println("");
+			if(forValidation)
+			{
+				sb.append("sb.append(\"\\n\");\n");
+			}
+			else
+			{
+				sb.append("\n");
+			}
+		    
 			for(int i =0; i < m_solns[iGraph].getNumberOfNodes() ; i++)
 			{
 				Node n = m_solns[iGraph].getNode(i);
 				Vector<Path> vPaths = n.getPaths();
-				System.out.println("Number of paths from "+ iGraph +" to "+n.getID()+" is " + vPaths.size());
+				if(forValidation)
+				{
+
+					sb.append("sb.append(\"Number of paths from "+ Integer.toString(iGraph) +" to "+Integer.toString(n.getID())+" is " + Integer.toString(vPaths.size()) +"\\n\");\n");
+				}
+				else
+				{
+					sb.append("Number of paths from "+ iGraph +" to "+n.getID()+" is " + vPaths.size()+"\n");
+				}
+				
+				
 				for(int j = 0; j < vPaths.size(); j++)
 				{
 					Path p = vPaths.get(j);
 
-					System.out.print("start of path "+ p.getStart().getID()+" ");
+					if(forValidation)
+					{
+						sb.append("sb.append(\"start of path "+ Integer.toString(p.getStart().getID()) +" ");
+					}
+					else
+					{
+						sb.append("start of path "+ p.getStart().getID()+" ");
+					}	
+					
+					
 					for(int k =0; k < p.getLength(); k++)
 					{
 						Node n2 = p.getPath().get(k);
 						int id = n2.getID();
-						System.out.print(" " + id);
+						if(forValidation)
+						{
+
+							sb.append(" " + Integer.toString(id));
+						}
+						else
+						{
+							sb.append(" " + id);
+						}	
+						
 					}
-					System.out.println(": Path Length " + p.getLength());					
+					
+					if(forValidation)
+					{
+						sb.append(" : Path Length " + Integer.toString(p.getLength()) + "\\n\");\n");
+				    }
+					else
+					{
+						sb.append(" : Path Length " + p.getLength()+"\n");
+					}					
+										
 				}
 			}
 		}
+		return sb;
 		
 	}
-	
-
-	
-	
 
 	
 }

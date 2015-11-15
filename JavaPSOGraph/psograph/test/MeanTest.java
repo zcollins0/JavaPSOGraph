@@ -72,7 +72,7 @@ public class MeanTest {
 				
 				
 				assertTrue("node id "+nodeId+
-						"has mean lenght of "+ meanLength,
+						"has mean lenght of "+ meanLength +" which doesn't match " +v,
 						Double.compare(meanLength, v)==0);	
 			}
 			else if(nodeId == 1 )
@@ -133,9 +133,13 @@ public class MeanTest {
 						+ cf.calculate(Math.sqrt(Math.pow(.1, 2) +  Math.pow(.1, 2) ));
 				double v_cost = v/3.0;
 				
+			//	java.lang.AssertionError: node id 0has mean lenght of 0.020000000000000004 instead of 0.026666666666666672
+
+
+
 				//Math round off error
 				assertTrue("node id "+nodeId+
-						"has mean lenght of "+ meanCost + " instead of "+v_cost,
+						"has mean length of "+ meanCost + " instead of "+v_cost,
 						Double.compare(meanCost, v_cost)==0);	
 			}
 			else if(nodeId == 1 )
