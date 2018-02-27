@@ -42,7 +42,6 @@ public class CostBasis extends Graph implements Serializable{
 	
 	/**
 	 * Goes through each node in the graph and adds in the longest link possible.
-	 * NOTE this is bugged at the moment and only adds in a random link.
 	 * @throws Exception
 	 */
 	void addInLongestLinks() throws Exception
@@ -53,10 +52,7 @@ public class CostBasis extends Graph implements Serializable{
 		Vector<Node> v_Nodes2 = new Vector<Node>(getHeaderNodesMap().values());
 		for(; i < numNodes ; )
 		{
-			// TODO  this is a bug, as it should be getting the longest link
-			// Instead it is getting a random link
-			// While this is wrong as stated in the thesis,
-			// I do not think it invalidates any research
+
 			int t_idFurthestNode = r.nextInt(v_Nodes2.size());
 			Node furthestNeighborA = m_nodeLoc.getHeaderNodesMap().get(t_idFurthestNode);
 				
@@ -106,7 +102,7 @@ public class CostBasis extends Graph implements Serializable{
 		else if(numUniqueEdges > v_Nodes.size() * (v_Nodes.size() -1) )
 			throw new Exception("Maximum number of edges equals N*N-1.");
 
-		addInLongestLinks();
+		//addInLongestLinks();
 		i = v_Nodes.size();
 		
 		for(; i < numUniqueEdges ; i++)

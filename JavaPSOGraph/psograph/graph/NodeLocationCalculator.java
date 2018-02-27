@@ -88,6 +88,10 @@ public class NodeLocationCalculator  extends Graph implements Serializable
 		boolean found = false;
 		
 		TreeMap<Double, Vector<Integer>> dist = from.getNeighborDistribution();
+		if(dist == null)
+		{
+			return -1;
+		}
 		
 		Vector<Double> keys = new Vector<Double>(dist.keySet());
 		int keysize = keys.size();
