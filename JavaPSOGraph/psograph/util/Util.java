@@ -32,13 +32,16 @@ import java.io.ObjectOutputStream;
 import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Random;
 import java.util.TreeMap;
 import java.util.Vector;
 
 import psograph.graph.CalculatedGraph;
 import psograph.graph.Graph;
+import psograph.graph.GraphConstants;
 import psograph.graph.Node;
 import psograph.graph.NonLinearCostFunction;
+import psograph.pso.PSOConstants;
 
 
 public class Util {
@@ -594,7 +597,37 @@ public class Util {
 		return graph;
 	}
 	
-	
+	public static void perturbParticle(Graph particle) throws Exception
+	{
+		Random r = new Random();
+		
+		int base = r.nextInt(1+ PSOConstants.PERTURB_MAXIMUM - PSOConstants.PERTURB_MINIMUM);
+		
+		int perturbAmount = PSOConstants.PERTURB_MINIMUM + base;
+		
+		for(int i =0; i < perturbAmount; i++)
+		{
+			int pickA, pickB;
+			
+			//Olekas May-19-2012 had this using the constant which is wrong
+			//should be indicated by the number of Nodes in the graph
+			pickA = r.nextInt(particle.getNumberOfNodes());
+			pickB = r.nextInt(particle.getNumberOfNodes());
+			while(pickA == pickB)
+			{
+				pickB = r.nextInt(GraphConstants.NUM_NODES);				
+			}
+			
+			if(!particle.isNodeAConnectedToNodeB(particle.getNode(pickA), particle.getNode(pickB)))
+			{
+				particle.addConnection(pickA, pickB);
+			}
+			else
+			{
+				particle.removeConnection(pickA, pickB);
+			}
+		}
+	}
 	
 	
 
