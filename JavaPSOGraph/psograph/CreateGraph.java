@@ -21,37 +21,37 @@ package psograph;
 import java.io.*;
 import java.util.Random;
 import java.util.Vector;
+import java.lang.Math;
 
 import psograph.graph.*;
 import psograph.measurements.PercentageInLargestCluster;
 import psograph.util.Util;
 
 
-
-public class CreateGraph 
+public class CreateGraph
 {
 
 	//This is the directory where the Seed is generated.  The Seed is the Node configuration
 	//with no edges
-	File m_SeedDirectory;  
-	
-	//This is where the graphs will reside TODO need more
+	File m_SeedDirectory;
+
 	File m_GraphDirectory;
-	
+
 	Graph m_graphSeed;
 	Graph canditate;
-	
+
 	double m_basisCost;
 	NodeLocationCalculator m_nodeLoc;
-	
+
 	int seed = 0;
-	int candidate = 0;
-	
+	int candidateCounter = 0;
+
 	public CreateGraph()
 	{
-		
+
 	}
-	
+
+	//This generates the Node Configuration for you to connect
 	private void generateSeed() throws Exception
 	{
 		//Generate a new graph for as the Seed
@@ -62,154 +62,123 @@ public class CreateGraph
 		System.out.println("Saving Graph Seed "+seed);
 		// stream out seed
 		m_SeedDirectory = Util.CreateSeedDirectory();
-		Util.streamOutSeed(m_SeedDirectory, m_graphSeed);   
-		
+		Util.streamOutSeed(m_SeedDirectory, m_graphSeed);
+		//Util.printMFile(m_graphSeed);
+
 		m_GraphDirectory = Util.CreateCalculatedGraphDirectory(m_SeedDirectory);
-		
+
 		System.out.println("--------------------------------------");
-		
+
 		m_nodeLoc = new NodeLocationCalculator(m_graphSeed, false);
 		m_nodeLoc.calculateResults();
 	}
-	
+
 	private void calculateCostBasis() throws Exception
 	{
 		m_basisCost =0;
 		CostBasis costBasis = new CostBasis(m_graphSeed);
-			
+
 		//System.out.println("-----------exponentialCostBasis-----------------");
 		costBasis.generate(GraphConstants.MAX_CONNECTIONS);
 		m_basisCost = costBasis.getCost();
-		//System.out.println("Total edges "+exponentialCostBasis.getTotalEdges());			
+		System.out.println("Total edges "+costBasis.getTotalEdges());
 		Util.streamOutExponentialGraph(m_SeedDirectory, costBasis,1);
 
 		PercentageInLargestCluster expoLCC = new PercentageInLargestCluster(costBasis);
 		double valueCostBasisLCC = expoLCC.Measure();
 		if(Double.compare(valueCostBasisLCC,1.0) != 0)
-			System.out.println("valueExpoLCC is not equal to 1.0 : "+valueCostBasisLCC + "differ of :" + (1.0 - valueCostBasisLCC));	
-		
-		//Do we want to perform some measurements on this guy
-		
-	}
-	
-	private void connnectCandidate() throws Exception
-	{
-		
-		Random pickNode = new Random();
+			System.out.println("valueExpoLCC is not equal to 1.0 : "+valueCostBasisLCC + "differ of :" + (1.0 - valueCostBasisLCC));
 
-		NodeLocationCalculator workingNodeLoc = new NodeLocationCalculator(m_nodeLoc, false);
-		
-		//workingNodeLoc.printWithLocationAndWeights();
-		
+		CalculatedGraph calcCostBasis = new CalculatedGraph(costBasis);
+		calcCostBasis.setCostBasis(m_basisCost);
+		calcCostBasis.UpdateCalcuations();
+		System.out.println("------------------Begin Measurements-----------");
+		System.out.println("Avg Robustness Measure for Random - Percentage in LCC "+calcCostBasis.getRandomLCC());
+		System.out.println("Avg Robustness Measure for Random - Diameter in LCC "+calcCostBasis.getRandomDiameter());
+		System.out.println("Avg Robustness Measure for Directed - Percentage in LCC "+calcCostBasis.getDirectLCC());
+		System.out.println("Avg Robustness Measure for Directed - Diameter in LCC "+calcCostBasis.getDirectDiameter());
+		System.out.println("Connectivity Measure - AISPL "+ calcCostBasis.getAISPL());
+		System.out.println("Cost Measure - summation weight costs "+ calcCostBasis.getCost());
+		System.out.println("Cost Basis -                      "+ calcCostBasis.getCostBasis());
+		double t = calcCostBasis.getCost() / calcCostBasis.getCostBasis();
+		System.out.println("Cost Basis ratio - "+t );
+		System.out.println("Fitness Value -  "+calcCostBasis.getFitnessValue());
+		System.out.println("Diameter Value -  "+calcCostBasis.getDiameter());
+		System.out.println("ClusteringCoefficient - "+calcCostBasis.getClusteringCoefficient());
+		System.out.println("Per LCC -  "+calcCostBasis.getLCC());
+		System.out.println("------------------End Measurements-------------");
+
+		Util.streamOutGraphAsMFile(new FileWriter(m_GraphDirectory+"\\CostBasis"+1+".m") ,costBasis, 1);
+	}
+
+	private void connectCandidate() throws Exception
+	{
 		canditate = new Graph(m_graphSeed);
-		
-		Vector<Node> v_Nodes = new Vector<Node>(m_graphSeed.getHeaderNodesMap().values());
+
+		Vector<Node> v_Nodes = new Vector<>(m_graphSeed.getHeaderNodesMap().values());
 		int jj;
 
-		//
-		// We should really be picking each node randomly.
-		// 
-		//  three different ideas on how to connect initially
-		//  n = number of nodes
-		//  1)Put in n initial connections.  Where each node
-		//  will have a connection to another node
-		//
-		//  2) have n-1 connections.  This will gives us a chance to make a tree connecting
-		// all nodes
-		//
-		// 3) Make a MST of the nodes
-		//
-		
-		int num_of_nodes = v_Nodes.size();				
-		
-		for(jj=0; jj < num_of_nodes ; jj++)
-		{
-			int t_id = pickNode.nextInt(v_Nodes.size());
-			
-			Node n = workingNodeLoc.chooseCloseNode(v_Nodes.get(t_id));
-			if(n == null)
-			{
-				throw new Exception("ERROR - null node returned for choose close node");
-			}
-			else
-			{
-				//System.out.println("a real node returned for choose close node");
-				Edge ci = n.getConnectionInfo(v_Nodes.get(t_id));
-				canditate.addConnection(v_Nodes.get(t_id).getID(), n.getID(), ci.getWeight());
-				
-				//Remove from working NodeLoc so we don't hit it in random phase
-				workingNodeLoc.removeConnection(v_Nodes.get(t_id).getID(), n.getID());
-				
-				//System.out.println("v_Nodes.get(t_id).m_id is "+v_Nodes.get(t_id).m_id);
-				//System.out.println("t_id is "+t_id);
-				v_Nodes.remove(t_id);
-				//System.out.println("n.m_id is "+n.m_id);
-				//int t2 = v_Nodes.indexOf(n);
-				//System.out.println("t2 is "+t2);							
-			}
-		}
-		
-	//	System.out.println("Total edges after first connect "+canditate.getTotalEdges());
-						
-		//System.out.println("Print out of candiate after initial connectiveness");
-		//canditate.printWithLocationAndWeights();
-		//printMFile(canditate);
-		//System.out.println("End of Print out of candiate after initial connectiveness");
-		
-		
-		v_Nodes = new Vector<Node>(m_graphSeed.getHeaderNodesMap().values());
-		//int MAX_CONNECTIONS = (6 * v_Nodes.size());
-		
-		//System.out.println("MAX_CONNECTIONS "+MAX_CONNECTIONS);
-		
-		v_Nodes = new Vector<Node>(m_graphSeed.getHeaderNodesMap().values());
-						
-		for (jj=0; jj < GraphConstants.MAX_CONNECTIONS; )
-		{
-			
-			int t_id = pickNode.nextInt(v_Nodes.size());
-			Node NodeToConnect = v_Nodes.get(t_id);
+		int num_of_nodes = v_Nodes.size();
+		//Add in NumNodes edges that connect to close Nodes
+		Node middlest = v_Nodes.get(0);
+		int mididx = 0;
 
-			Node n = workingNodeLoc.chooseNode(NodeToConnect);
-			if(n == null)
-			{
-				System.out.println("null node returned for choose random/close node");
-			}
-			else
-			{
-				Edge ci = n.getConnectionInfo(NodeToConnect);
-				canditate.addConnection(NodeToConnect.getID(), n.getID(), ci.getWeight());
-				workingNodeLoc.removeConnection(NodeToConnect.getID(), n.getID());
-				jj=jj+2;
+		double totalX = 0;
+		double totalY = 0;
+
+		for (jj = 0; jj < num_of_nodes; jj++) {
+			Node n = v_Nodes.get(jj);
+			totalX += n.getX();
+			totalY += n.getY();
+		}
+
+		double avgX = totalX/num_of_nodes;
+		double avgY = totalY/num_of_nodes;
+
+		System.out.printf("Average (x, y) = (%f, %f))\n", avgX, avgY);
+
+		for (jj = 0; jj < num_of_nodes; jj++) {
+			Node n = v_Nodes.get(jj);
+			if (Math.abs(n.getX() - avgX) + Math.abs(n.getY() - avgY) < Math.abs(middlest.getX() - avgX) + Math.abs(middlest.getY() - avgY)) {
+				middlest = n;
+				mididx = jj;
 			}
 		}
-		
-	//	System.out.println("Random :"+workingNodeLoc.m_random+" closest :"+workingNodeLoc.m_closest);
-		if(canditate.getTotalEdges() != GraphConstants.MAX_CONNECTIONS)
-			throw new Exception("Total edges "+canditate.getTotalEdges()+ " does not equal "+GraphConstants.MAX_CONNECTIONS);
-		
+
+		for (int i = 0; i < 4; i++) {
+
+		}
+
+		for (jj = 0; jj < num_of_nodes; jj++) {
+			if (jj != mididx)
+				canditate.addConnection(middlest.getID(), v_Nodes.get(jj).getID());
+		}
+
+		System.out.println("Total edges after Second connect "+canditate.getTotalEdges());
 	}
-	
+
+	private void quadrantizeAndConnect(Graph candidate, Vector<Node> nodes) {
+
+	}
+
 	public void doWork() throws Exception
 	{
 		try
 		{
-			for( seed=0; seed < GraphConstants.MAX_SEEDS; seed++)
+			for( seed=0; seed < 1; seed++)
 			{
-				
+				//The NodeLocation
 				generateSeed();
 
 				//Now to make some graphs to be used for normalizing the cost
 				calculateCostBasis();
 
-				//nodeLoc.printWithLocationAndWeights();
+				double fitness = 0;
 
-				for(candidate=0; candidate < GraphConstants.MAX_ITERATIONS; candidate++)
+				for(candidateCounter=0; candidateCounter < 1; candidateCounter++)
 				{
-					//canditate.printWithLocationAndWeights();
-					
-					connnectCandidate();
-					measureAndOutputCandidate();					  
+					connectCandidate();
+					fitness = measureAndOutputCandidate();
 				}
 			}
 		}
@@ -219,24 +188,24 @@ public class CreateGraph
 			throw e;
 		}
 	}
-	
-	private void measureAndOutputCandidate() throws Exception
+
+	private double measureAndOutputCandidate() throws Exception
 	{
 
-		CalculatedGraph calculatedCanditate = new CalculatedGraph(canditate); 
+		CalculatedGraph calculatedCanditate = new CalculatedGraph(canditate);
 		calculatedCanditate.setCostBasis(m_basisCost);
-	//	calculatedCanditate.UpdateCalcuations();
+		calculatedCanditate.UpdateCalcuations();
 		calculatedCanditate.UpdatePSOCalculations();
-		
+
 		System.out.println("------------------Begin Measurements-----------");
 		System.out.println("Avg Robustness Measure for Random - Percentage in LCC "+calculatedCanditate.getRandomLCC());
 		System.out.println("Avg Robustness Measure for Random - Diameter in LCC "+calculatedCanditate.getRandomDiameter());
 		System.out.println("Avg Robustness Measure for Directed - Percentage in LCC "+calculatedCanditate.getDirectLCC());
 		System.out.println("Avg Robustness Measure for Directed - Diameter in LCC "+calculatedCanditate.getDirectDiameter());
 		System.out.println("Connectivity Measure - AISPL "+ calculatedCanditate.getAISPL());
-		System.out.println("Cost Measure - summation weight costs "+ calculatedCanditate.getCost());	
+		System.out.println("Cost Measure - summation weight costs "+ calculatedCanditate.getCost());
 		System.out.println("Cost Basis -                      "+ calculatedCanditate.getCostBasis());
-	    double t = calculatedCanditate.getCost() / calculatedCanditate.getCostBasis();
+		double t = calculatedCanditate.getCost() / calculatedCanditate.getCostBasis();
 		System.out.println("Cost Basis ratio - "+t );
 		System.out.println("Fitness Value -  "+calculatedCanditate.getFitnessValue());
 		System.out.println("Diameter Value -  "+calculatedCanditate.getDiameter());
@@ -244,19 +213,22 @@ public class CreateGraph
 		System.out.println("Per LCC -  "+calculatedCanditate.getLCC());
 		//printMFile(canditate);
 		System.out.println("------------------End Measurements-------------");
-		calculatedCanditate.printWithLocationAndWeights();
+		//calculatedCanditate.printWithLocationAndWeights();
 
-		Util.streamOutCalculatedGraph(m_GraphDirectory, candidate, calculatedCanditate);	
+		Util.streamOutCalculatedGraph(m_GraphDirectory, candidateCounter, calculatedCanditate);
+		Util.streamOutGraphAsMFile(new FileWriter(m_GraphDirectory+"\\Graph"+1+".m") ,calculatedCanditate, 1);
+
+		return calculatedCanditate.getFitnessValue();
 	}
-	
 
-	
+
+
 	/**
 	 * @param args
 	 */
 	public static void main(String[] args) throws Exception
 	{
-		
+
 		try
 		{
 			CreateGraph createGraph = new CreateGraph();
