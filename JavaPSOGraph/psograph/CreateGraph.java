@@ -45,6 +45,8 @@ public class CreateGraph
 	int seed = 0;
 	private int candidateCounter = 0;
 
+	private Node m_centerNode;
+
 	private CreateGraph()
 	{
 
@@ -114,9 +116,10 @@ public class CreateGraph
 	{
 		canditate = new Graph(m_graphSeed);
 
-		List<Node> v_Nodes = new ArrayList<>(m_graphSeed.getHeaderNodesMap().values());
+		List<Node> nodes = new ArrayList<>(m_graphSeed.getHeaderNodesMap().values());
 
-		quadrantizeAndConnect(canditate, v_Nodes, 1);
+		m_centerNode = getCenterNode(nodes);
+		quarterAndConnect(canditate, nodes, 2);
 
 		System.out.println("Total edges after Second connect "+canditate.getTotalEdges());
 	}
@@ -135,8 +138,7 @@ public class CreateGraph
 		double avgX = totalX/nodes.size();
 		double avgY = totalY/nodes.size();
 
-		for (int i = 0; i < nodes.size(); i++) {
-			Node n = nodes.get(i);
+		for (Node n : nodes) {
 			if (Math.abs(n.getX() - avgX) + Math.abs(n.getY() - avgY) < Math.abs(centerNode.getX() - avgX) + Math.abs(centerNode.getY() - avgY)) {
 				centerNode = n;
 			}
@@ -155,16 +157,14 @@ public class CreateGraph
 		return centerNode;
 	}
 
-	private void quadrantizeAndConnect(Graph candidate, List<Node> nodes, int quadrantizationLevel) throws Exception {
-		if (quadrantizationLevel == 0) return;
-
+	private Node quarterAndConnect(Graph candidate, List<Node> nodes, int quarteringLevel) throws Exception {
+		if (quarteringLevel == 0) return null;
 		Node centerNode = getCenterNode(nodes);
 
 		List<Node> upperLeft = new ArrayList<>();
 		List<Node> upperRight = new ArrayList<>();
 		List<Node> lowerLeft = new ArrayList<>();
 		List<Node> lowerRight = new ArrayList<>();
-		System.out.printf("Average (x, y) = (%f, %f))\n", centerNode.getX(), centerNode.getY());
 
 		for (Node n: nodes) {
 			if (n == centerNode) continue;
@@ -180,18 +180,30 @@ public class CreateGraph
 			}
 		}
 
-		if (quadrantizationLevel > 1) {
-			// TODO: make recursion work
-			quadrantizeAndConnect(candidate, upperLeft, quadrantizationLevel - 1);
-			quadrantizeAndConnect(candidate, upperRight, quadrantizationLevel - 1);
-			quadrantizeAndConnect(candidate, lowerLeft, quadrantizationLevel - 1);
-			quadrantizeAndConnect(candidate, lowerRight, quadrantizationLevel - 1);
+		if (quarteringLevel > 1) {
+			candidate.addConnection(quarterAndConnect(candidate, upperLeft, quarteringLevel - 1).getID(), centerNode.getID());
+			candidate.addConnection(quarterAndConnect(candidate, upperRight, quarteringLevel - 1).getID(), centerNode.getID());
+			candidate.addConnection(quarterAndConnect(candidate, lowerLeft, quarteringLevel - 1).getID(), centerNode.getID());
+			candidate.addConnection(quarterAndConnect(candidate, lowerRight, quarteringLevel - 1).getID(), centerNode.getID());
 		} else {
-			candidate.addConnection(connectToCenterNode(canditate, upperLeft).getID(), centerNode.getID());
-			candidate.addConnection(connectToCenterNode(canditate, upperRight).getID(), centerNode.getID());
-			candidate.addConnection(connectToCenterNode(canditate, lowerLeft).getID(), centerNode.getID());
-			candidate.addConnection(connectToCenterNode(canditate, lowerRight).getID(), centerNode.getID());
+			for (int i = 0; i < 4; i++) {
+				List<Node> nodesl;
+				if (i == 0) nodesl = upperLeft;
+				else if (i == 1) nodesl = upperRight;
+				else if (i == 2) nodesl = lowerLeft;
+				else nodesl = lowerRight;
+				Node n = connectToCenterNode(candidate, nodesl);
+				double ratio = Math.abs(n.getX() - m_centerNode.getX()) + Math.abs(n.getY() - m_centerNode.getY()) /
+						Math.abs(centerNode.getX() - m_centerNode.getX()) + Math.abs(centerNode.getY() - m_centerNode.getY());
+				if (ratio < 0.95) {
+					candidate.addConnection(n.getID(), m_centerNode.getID());
+				} else {
+					candidate.addConnection(n.getID(), centerNode.getID());
+				}
+			}
 		}
+
+		return centerNode;
 	}
 
 	private void doWork() throws Exception
@@ -224,7 +236,6 @@ public class CreateGraph
 
 	private double measureAndOutputCandidate() throws Exception
 	{
-
 		CalculatedGraph calculatedCanditate = new CalculatedGraph(canditate);
 		calculatedCanditate.setCostBasis(m_basisCost);
 		calculatedCanditate.UpdateCalcuations();
