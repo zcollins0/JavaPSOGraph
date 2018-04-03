@@ -193,9 +193,18 @@ public class CreateGraph
 				else if (i == 2) nodesl = lowerLeft;
 				else nodesl = lowerRight;
 				Node n = connectToCenterNode(candidate, nodesl);
-				double ratio = Math.abs(n.getX() - m_centerNode.getX()) + Math.abs(n.getY() - m_centerNode.getY()) /
-						Math.abs(centerNode.getX() - m_centerNode.getX()) + Math.abs(centerNode.getY() - m_centerNode.getY());
-				if (ratio < 0.95) {
+				// n: center node of a quadrant
+				// centerNode: node in between the four quadrants
+				// m_centerNode: overall center node
+				// our two options are: connect n to centerNode OR connect n to m_centerNode
+				// we want to choose the one that adds the least access cost to the nodes we just connected
+				double twoStepLength = Math.hypot(n.getX()-centerNode.getX(), n.getY()-centerNode.getY()) +
+						Math.hypot(centerNode.getX()-m_centerNode.getX(), centerNode.getY()-m_centerNode.getY());
+				double singleStepLength = Math.hypot(n.getX()-m_centerNode.getX(), n.getY()-m_centerNode.getY());
+				// ratio of two-step distance to one-step distance
+				// if two-step distance is much larger, connect to use one step instead
+				double ratio = twoStepLength/singleStepLength;
+				if (ratio > 1.3) {
 					candidate.addConnection(n.getID(), m_centerNode.getID());
 				} else {
 					candidate.addConnection(n.getID(), centerNode.getID());
