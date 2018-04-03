@@ -19,8 +19,8 @@
 package psograph;
 
 import java.io.*;
-import java.util.Random;
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.List;
 import java.lang.Math;
 
 import psograph.graph.*;
@@ -33,20 +33,19 @@ public class CreateGraph
 
 	//This is the directory where the Seed is generated.  The Seed is the Node configuration
 	//with no edges
-	File m_SeedDirectory;
+	private File m_SeedDirectory;
 
-	File m_GraphDirectory;
+	private File m_GraphDirectory;
 
-	Graph m_graphSeed;
-	Graph canditate;
+	private Graph m_graphSeed;
+	private Graph canditate;
 
-	double m_basisCost;
-	NodeLocationCalculator m_nodeLoc;
+	private double m_basisCost;
 
 	int seed = 0;
-	int candidateCounter = 0;
+	private int candidateCounter = 0;
 
-	public CreateGraph()
+	private CreateGraph()
 	{
 
 	}
@@ -69,7 +68,7 @@ public class CreateGraph
 
 		System.out.println("--------------------------------------");
 
-		m_nodeLoc = new NodeLocationCalculator(m_graphSeed, false);
+		NodeLocationCalculator m_nodeLoc = new NodeLocationCalculator(m_graphSeed, false);
 		m_nodeLoc.calculateResults();
 	}
 
@@ -115,57 +114,91 @@ public class CreateGraph
 	{
 		canditate = new Graph(m_graphSeed);
 
-		Vector<Node> v_Nodes = new Vector<>(m_graphSeed.getHeaderNodesMap().values());
-		int jj;
+		List<Node> v_Nodes = new ArrayList<>(m_graphSeed.getHeaderNodesMap().values());
 
-		int num_of_nodes = v_Nodes.size();
-		//Add in NumNodes edges that connect to close Nodes
-		Node middlest = v_Nodes.get(0);
-		int mididx = 0;
-
-		double totalX = 0;
-		double totalY = 0;
-
-		for (jj = 0; jj < num_of_nodes; jj++) {
-			Node n = v_Nodes.get(jj);
-			totalX += n.getX();
-			totalY += n.getY();
-		}
-
-		double avgX = totalX/num_of_nodes;
-		double avgY = totalY/num_of_nodes;
-
-		System.out.printf("Average (x, y) = (%f, %f))\n", avgX, avgY);
-
-		for (jj = 0; jj < num_of_nodes; jj++) {
-			Node n = v_Nodes.get(jj);
-			if (Math.abs(n.getX() - avgX) + Math.abs(n.getY() - avgY) < Math.abs(middlest.getX() - avgX) + Math.abs(middlest.getY() - avgY)) {
-				middlest = n;
-				mididx = jj;
-			}
-		}
-
-		for (int i = 0; i < 4; i++) {
-
-		}
-
-		for (jj = 0; jj < num_of_nodes; jj++) {
-			if (jj != mididx)
-				canditate.addConnection(middlest.getID(), v_Nodes.get(jj).getID());
-		}
+		quadrantizeAndConnect(canditate, v_Nodes, 1);
 
 		System.out.println("Total edges after Second connect "+canditate.getTotalEdges());
 	}
 
-	private void quadrantizeAndConnect(Graph candidate, Vector<Node> nodes) {
+	private Node getCenterNode(List<Node> nodes) {
+		Node centerNode = nodes.get(0);
 
+		double totalX = 0;
+		double totalY = 0;
+
+		for (Node n : nodes) {
+			totalX += n.getX();
+			totalY += n.getY();
+		}
+
+		double avgX = totalX/nodes.size();
+		double avgY = totalY/nodes.size();
+
+		for (int i = 0; i < nodes.size(); i++) {
+			Node n = nodes.get(i);
+			if (Math.abs(n.getX() - avgX) + Math.abs(n.getY() - avgY) < Math.abs(centerNode.getX() - avgX) + Math.abs(centerNode.getY() - avgY)) {
+				centerNode = n;
+			}
+		}
+
+		return centerNode;
 	}
 
-	public void doWork() throws Exception
+	private Node connectToCenterNode(Graph canditate, List<Node> nodes) throws Exception {
+		Node centerNode = getCenterNode(nodes);
+
+		for (Node n : nodes) {
+			if (n != centerNode) canditate.addConnection(centerNode.getID(), n.getID());
+		}
+
+		return centerNode;
+	}
+
+	private void quadrantizeAndConnect(Graph candidate, List<Node> nodes, int quadrantizationLevel) throws Exception {
+		if (quadrantizationLevel == 0) return;
+
+		Node centerNode = getCenterNode(nodes);
+
+		List<Node> upperLeft = new ArrayList<>();
+		List<Node> upperRight = new ArrayList<>();
+		List<Node> lowerLeft = new ArrayList<>();
+		List<Node> lowerRight = new ArrayList<>();
+		System.out.printf("Average (x, y) = (%f, %f))\n", centerNode.getX(), centerNode.getY());
+
+		for (Node n: nodes) {
+			if (n == centerNode) continue;
+
+			if (n.getY() > centerNode.getY() && n.getX() > centerNode.getX()) {
+				upperRight.add(n);
+			} else if (n.getY() > centerNode.getY() && n.getX() <= centerNode.getX()) {
+				upperLeft.add(n);
+			} else if (n.getY() <= centerNode.getY() && n.getX() > centerNode.getX()) {
+				lowerRight.add(n);
+			} else {
+				lowerLeft.add(n);
+			}
+		}
+
+		if (quadrantizationLevel > 1) {
+			// TODO: make recursion work
+			quadrantizeAndConnect(candidate, upperLeft, quadrantizationLevel - 1);
+			quadrantizeAndConnect(candidate, upperRight, quadrantizationLevel - 1);
+			quadrantizeAndConnect(candidate, lowerLeft, quadrantizationLevel - 1);
+			quadrantizeAndConnect(candidate, lowerRight, quadrantizationLevel - 1);
+		} else {
+			candidate.addConnection(connectToCenterNode(canditate, upperLeft).getID(), centerNode.getID());
+			candidate.addConnection(connectToCenterNode(canditate, upperRight).getID(), centerNode.getID());
+			candidate.addConnection(connectToCenterNode(canditate, lowerLeft).getID(), centerNode.getID());
+			candidate.addConnection(connectToCenterNode(canditate, lowerRight).getID(), centerNode.getID());
+		}
+	}
+
+	private void doWork() throws Exception
 	{
 		try
 		{
-			for( seed=0; seed < 1; seed++)
+			for(seed=0; seed < 1; seed++)
 			{
 				//The NodeLocation
 				generateSeed();
@@ -221,14 +254,11 @@ public class CreateGraph
 		return calculatedCanditate.getFitnessValue();
 	}
 
-
-
 	/**
-	 * @param args
+	 * @param args the command line input to the program
 	 */
 	public static void main(String[] args) throws Exception
 	{
-
 		try
 		{
 			CreateGraph createGraph = new CreateGraph();
