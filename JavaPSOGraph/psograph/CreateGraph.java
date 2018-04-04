@@ -38,7 +38,7 @@ public class CreateGraph
 	private File m_GraphDirectory;
 
 	private Graph m_graphSeed;
-	private Graph canditate;
+	private Graph m_candidate;
 
 	private double m_basisCost;
 
@@ -114,14 +114,14 @@ public class CreateGraph
 
 	private void connectCandidate() throws Exception
 	{
-		canditate = new Graph(m_graphSeed);
+		m_candidate = new Graph(m_graphSeed);
 
 		List<Node> nodes = new ArrayList<>(m_graphSeed.getHeaderNodesMap().values());
 
 		m_centerNode = getCenterNode(nodes);
-		quarterAndConnect(canditate, nodes, 2);
+		quarterAndConnect(m_candidate, nodes, 2);
 
-		System.out.println("Total edges after Second connect "+canditate.getTotalEdges());
+		System.out.println("Total edges after Second connect " + m_candidate.getTotalEdges());
 	}
 
 	private Node getCenterNode(List<Node> nodes) {
@@ -245,7 +245,7 @@ public class CreateGraph
 
 	private double measureAndOutputCandidate() throws Exception
 	{
-		CalculatedGraph calculatedCanditate = new CalculatedGraph(canditate);
+		CalculatedGraph calculatedCanditate = new CalculatedGraph(m_candidate);
 		calculatedCanditate.setCostBasis(m_basisCost);
 		calculatedCanditate.UpdateCalcuations();
 		calculatedCanditate.UpdatePSOCalculations();
